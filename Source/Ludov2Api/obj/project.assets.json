@@ -285,11 +285,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\krill\\source\\repos\\Ludov2\\Ludov2Api\\Ludov2Api.csproj",
+      "projectUniqueName": "C:\\Users\\krill\\Downloads\\Skola\\Backend\\ludo-v2-g7\\Source\\Ludov2Api\\Ludov2Api.csproj",
       "projectName": "Ludov2Api",
-      "projectPath": "C:\\Users\\krill\\source\\repos\\Ludov2\\Ludov2Api\\Ludov2Api.csproj",
+      "projectPath": "C:\\Users\\krill\\Downloads\\Skola\\Backend\\ludo-v2-g7\\Source\\Ludov2Api\\Ludov2Api.csproj",
       "packagesPath": "C:\\Users\\krill\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\krill\\source\\repos\\Ludov2\\Ludov2Api\\obj\\",
+      "outputPath": "C:\\Users\\krill\\Downloads\\Skola\\Backend\\ludo-v2-g7\\Source\\Ludov2Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\krill\\AppData\\Roaming\\NuGet\\NuGet.Config",

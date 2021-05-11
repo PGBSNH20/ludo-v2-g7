@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tixZOsSNguOcReD95Pb9Cf5uNuvD1SkS/jz9v1yuIQovFCCwNvwk+A/R/Ho2I1XUlC9J/wmLiOP6Qfc4Nv7lRg==",
+  "dgSpecHash": "9olUp6gfKEzNHaG7MakW8X1tTnbd/O/ZP18IiTQ5i7SSTo9c4caXi+HCUHfv9gkHPdpKskgH8DYUdX6fUYdrZw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\krill\\source\\repos\\Ludov2\\Ludov2Api\\Ludov2Api.csproj",
+  "projectFilePath": "C:\\Users\\krill\\Downloads\\Skola\\Backend\\ludo-v2-g7\\Source\\Ludov2Api\\Ludov2Api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\krill\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
     "C:\\Users\\krill\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
