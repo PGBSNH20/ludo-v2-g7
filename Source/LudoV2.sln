@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoV2Api", "LudoV2Api.csproj", "{E9916006-13A0-44E4-9C2E-C810C49616CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoV2Api", "LudoV2Api\LudoV2Api.csproj", "{E95EE8F1-E246-49FE-95B9-16BE509FFB52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E9916006-13A0-44E4-9C2E-C810C49616CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9916006-13A0-44E4-9C2E-C810C49616CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9916006-13A0-44E4-9C2E-C810C49616CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9916006-13A0-44E4-9C2E-C810C49616CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E95EE8F1-E246-49FE-95B9-16BE509FFB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95EE8F1-E246-49FE-95B9-16BE509FFB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E95EE8F1-E246-49FE-95B9-16BE509FFB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E95EE8F1-E246-49FE-95B9-16BE509FFB52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C8FE9C9A-A887-4D1F-B0CF-457ED9393AFD}
+		SolutionGuid = {FC901ADD-ADAD-4DFA-BC90-0693F610E044}
 	EndGlobalSection
 EndGlobal

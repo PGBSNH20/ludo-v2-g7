@@ -1,0 +1,15 @@
+﻿version: '3'
+services:
+  log-server:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    ports:
+      - "41433:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "verystrong!pass123"
+      MSSQL_PID: Express
+    volumes:
+      - pgbsnh20-ex2:/var/opt/mssql
+volumes:
+  pgbsnh20-ex2:
+    driver: local

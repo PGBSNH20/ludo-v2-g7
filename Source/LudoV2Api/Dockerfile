@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["LudoV2Api.csproj", "."]
-RUN dotnet restore "./LudoV2Api.csproj"
+COPY ["LudoV2Api/LudoV2Api.csproj", "LudoV2Api/"]
+RUN dotnet restore "LudoV2Api/LudoV2Api.csproj"
 COPY . .
-WORKDIR "/src/."
+WORKDIR "/src/LudoV2Api"
 RUN dotnet build "LudoV2Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
