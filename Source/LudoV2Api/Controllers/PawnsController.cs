@@ -15,8 +15,10 @@ namespace LudoV2Api.Controllers
     public class PawnsController : ControllerBase
     {
         private readonly LudoContext _context;
-        
-        private Dictionary<string, int> _pawnBases = new() 
+        private List<string> _turnOrder = new() { "Red", "Blue", "Green", "Yellow" };
+        private int _sixesRolled = 0;
+
+        private Dictionary<string, int> _pawnBases = new()
         {
             { "Red", 0 },
             { "Blue", 1 },
@@ -53,19 +55,14 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/move
         [HttpPut("move")]
-        public async Task<IActionResult> PutMovePawn(int dice, int id, int position, string teamColor, int gameid)
+        public async Task<IActionResult> PutMovePawn(int dice, int id, int position, string teamColor, int gameId)
         {
 
-            //  redSafeZone = 44-47; 
-            //  blueSafeZone = 48-51;
-            //  greenSafeZone = 52-55;
-            //  yellowSafeZone = 56-59;
-
-            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameid, teamColor);
+            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameId, teamColor);
 
             if (!canPlay)
             {
-                BadRequest("It's not your turn");
+                return BadRequest("It's not your turn");
             }
 
             var validateDice = ControllerMethods.ValidateDice(dice);
@@ -79,34 +76,76 @@ namespace LudoV2Api.Controllers
 
             var pawnsInBase = _context.Pawns.Where(x => x.Position == basePosition).Count();
 
-            if (pawnsInBase == 4 && dice != 6 || dice != 1)
+            if (pawnsInBase == 4 && dice != 6 && dice != 1)
             {
                 return BadRequest("No pawns on the field to move");
             }
+
+            else if (position == basePosition)
+            {
+                return BadRequest("Use /movefrombase to move pawns from base");
+            }
+
             int newPosition = position + dice;
+            var pawn = await _context.Pawns.FindAsync(id);
 
             if (newPosition > 43 && teamColor != "Red")
             {
                 newPosition = 4 + (newPosition - 43);
+                pawn.EligibleForWin = true;
             }
 
-            newPosition = ControllerMethods.PawnSafeZone(newPosition, teamColor);
-
-            var existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
-
-            int knockedOutPosition = ControllerMethods.KockOutPawn(teamColor, existsOnPosition, newPosition);
-
-            if (knockedOutPosition == -2)
+            if (pawn.EligibleForWin)
             {
-                return BadRequest("You can't have two pawns at the same position");
-            }
-            else if (knockedOutPosition >= 0)
-            {
-                existsOnPosition.Position = knockedOutPosition;
+                newPosition = ControllerMethods.PawnSafeZone(newPosition, teamColor);
             }
 
-            var pawn = await _context.Pawns.FindAsync(id);
+            Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
+
+            if (existsOnPosition != null)
+            {
+                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(teamColor, existsOnPosition, newPosition);
+
+                if (knockedOutPosition.Position == -2)
+                {
+                    return BadRequest("You can't have two pawns at the same position");
+                }
+                else if (knockedOutPosition.Position >= 0)
+                {
+                    existsOnPosition.Position = knockedOutPosition.Position;
+                }
+            }
+
             pawn.Position = newPosition;
+
+            var game = await _context.Games.FindAsync(gameId);
+
+            if (dice == 6)
+            {
+                _sixesRolled++;
+            }
+
+            if (_sixesRolled >= 2 || _sixesRolled == 0)
+            {
+                int index = _turnOrder.IndexOf(teamColor);
+
+                if (index + 1 > 3)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index++;
+                }
+
+                game.CurrentTurn = _turnOrder[index];
+                _sixesRolled = 0;
+            }
+            else if (_sixesRolled > 0)
+            {
+                game.CurrentTurn = teamColor;
+            }
+
             _context.SaveChanges();
 
             return NoContent();
@@ -143,13 +182,50 @@ namespace LudoV2Api.Controllers
             if (dice == 1)
             {
                 pawnToMove.Position = pawnStartPosition[pawnToMove.Color];
+                var game = await _context.Games.FindAsync(gameId);
+
+                int index = _turnOrder.IndexOf(teamColor);
+
+                if (index + 1 > 3)
+                {
+                    index = 0;
+                }
+                else
+                {
+                    index++;
+                }
+
+                game.CurrentTurn = _turnOrder[index];
 
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
-            else if (dice ==  6)
+            else if (dice == 6)
             {
+                _sixesRolled++;
                 pawnToMove.Position = pawnStartPosition[pawnToMove.Color] + 5;
+                var game = await _context.Games.FindAsync(gameId);
+
+                if (_sixesRolled < 2)
+                {
+                    int index = _turnOrder.IndexOf(teamColor);
+
+                    if (index + 1 > 3)
+                    {
+                        index = 0;
+                    }
+                    else
+                    {
+                        index++;
+                    }
+
+                    game.CurrentTurn = _turnOrder[index];
+                    _sixesRolled = 0;
+                }
+                else
+                {
+                    game.CurrentTurn = teamColor;
+                }
 
                 await _context.SaveChangesAsync();
                 return NoContent();

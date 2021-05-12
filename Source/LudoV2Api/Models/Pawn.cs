@@ -9,5 +9,6 @@ namespace LudoV2Api.Models
         public Game Game { get; set; }
         public string Color { get; set; }
         public int Position { get; set; }
+        public bool EligibleForWin { get; set; }
     }
 }

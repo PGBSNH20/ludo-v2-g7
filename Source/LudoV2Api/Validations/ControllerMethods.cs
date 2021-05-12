@@ -99,13 +99,14 @@ namespace LudoV2Api.Validations
             return position;
         }
 
-        public static int KockOutPawn(string teamColor, Pawn existsOnPosition, int newPosition)
+        public static Pawn KockOutPawn(string teamColor, Pawn existsOnPosition, int newPosition)
         {
             int knockedOutBasePosition = -1;
 
             if (existsOnPosition.Color == teamColor)
             {
-                return -2;
+                existsOnPosition.Position = -2;
+                return existsOnPosition;
             }
 
             else if (existsOnPosition.Position == newPosition && existsOnPosition.Color != teamColor)
@@ -113,21 +114,27 @@ namespace LudoV2Api.Validations
                 if (existsOnPosition.Color == "Red")
                 {
                     knockedOutBasePosition = 0;
+                    existsOnPosition.EligibleForWin = true;
                 }
                 else if (existsOnPosition.Color == "Blue")
                 {
                     knockedOutBasePosition = 1;
+                    existsOnPosition.EligibleForWin = false;
                 }
                 else if (existsOnPosition.Color == "Green")
                 {
                     knockedOutBasePosition = 2;
+                    existsOnPosition.EligibleForWin = false;
                 }
                 else if (existsOnPosition.Color == "Yellow")
                 {
                     knockedOutBasePosition = 3;
+                    existsOnPosition.EligibleForWin = false;
                 }
             }
-                return knockedOutBasePosition;
+
+            existsOnPosition.Position = knockedOutBasePosition;
+            return existsOnPosition;
         }
     }
 
