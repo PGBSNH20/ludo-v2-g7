@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LudoV2Api.Models;
 using LudoV2Api.Models.DbModels;
-
+using LudoV2Api.Validations;
 namespace LudoV2Api.Controllers
 {
     [Route("api/[controller]")]
@@ -53,8 +53,28 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/move
         [HttpPut("move")]
-        public async Task<IActionResult> PutMovePawn(int dice, int id, int position, string teamColor)
+        public async Task<IActionResult> PutMovePawn(int dice, int id, int position, string teamColor, int gameid)
         {
+
+            //  redSafeZone = 44-47; 
+            //  blueSafeZone = 48-51;
+            //  greenSafeZone = 52-55;
+            //  yellowSafeZone = 56-59;
+
+            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameid, teamColor);
+
+            if (!canPlay)
+            {
+                BadRequest("It's not your turn");
+            }
+
+            var validateDice = ControllerMethods.ValidateDice(dice);
+
+            if (!validateDice)
+            {
+                return BadRequest("You must roll between 1 and 6");
+            }
+
             int basePosition = _pawnBases[teamColor];
 
             var pawnsInBase = _context.Pawns.Where(x => x.Position == basePosition).Count();
@@ -65,35 +85,24 @@ namespace LudoV2Api.Controllers
             }
             int newPosition = position + dice;
 
-            var existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
-
-            if (existsOnPosition.Color == teamColor)
+            if (newPosition > 43 && teamColor != "Red")
             {
-                return BadRequest("Can't move to that position");
+                newPosition = 4 + (newPosition - 43);
             }
 
-            else if (existsOnPosition.Position == newPosition && existsOnPosition.Color != teamColor)
+            newPosition = ControllerMethods.PawnSafeZone(newPosition, teamColor);
+
+            var existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
+
+            int knockedOutPosition = ControllerMethods.KockOutPawn(teamColor, existsOnPosition, newPosition);
+
+            if (knockedOutPosition == -2)
             {
-                int knockedOutBasePosition = 0;
-
-                if (existsOnPosition.Color == "Red")
-                {
-                    knockedOutBasePosition = 0;
-                }
-                else if (existsOnPosition.Color == "Blue")
-                {
-                    knockedOutBasePosition = 1;
-                }
-                else if (existsOnPosition.Color == "Green")
-                {
-                    knockedOutBasePosition = 2;
-                }
-                else if (existsOnPosition.Color == "Yellow")
-                {
-                    knockedOutBasePosition = 3;
-                }
-
-                existsOnPosition.Position = knockedOutBasePosition;
+                return BadRequest("You can't have two pawns at the same position");
+            }
+            else if (knockedOutPosition >= 0)
+            {
+                existsOnPosition.Position = knockedOutPosition;
             }
 
             var pawn = await _context.Pawns.FindAsync(id);
@@ -104,7 +113,7 @@ namespace LudoV2Api.Controllers
         }
 
         [HttpPut("movefrombase")]
-        public async Task<IActionResult> PutPawnFromBase(int gameId, int pawnId, int dice)
+        public async Task<IActionResult> PutPawnFromBase(int gameId, int pawnId, int dice, string teamColor)
         {
 
             Dictionary<string, int> pawnStartPosition = new()
@@ -115,10 +124,19 @@ namespace LudoV2Api.Controllers
                 { "Yellow", 34 }
             };
 
-            //  redSafeZone = 34-37; 
-            //  blueSafeZone = 38-41;
-            //  greenSafeZone = 42-45;
-            //  yellowSafeZone = 46-49;
+            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameId, teamColor);
+
+            if (!canPlay)
+            {
+                return BadRequest("Not your turn");
+            }
+
+            var validateDice = ControllerMethods.ValidateDice(dice);
+
+            if (!validateDice)
+            {
+                return BadRequest("You must roll between 1 and 6");
+            }
 
             var pawnToMove = await _context.Pawns.FindAsync(pawnId);
 
