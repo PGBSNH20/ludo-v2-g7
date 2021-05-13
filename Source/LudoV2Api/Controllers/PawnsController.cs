@@ -89,7 +89,7 @@ namespace LudoV2Api.Controllers
             int newPosition = position + dice;
             var pawn = await _context.Pawns.FindAsync(id);
 
-            if (newPosition > 43 && teamColor != "Red")
+            if (newPosition > 43 && teamColor != "Red" && pawn.EligibleForWin == false)
             {
                 newPosition = 4 + (newPosition - 43);
                 pawn.EligibleForWin = true;

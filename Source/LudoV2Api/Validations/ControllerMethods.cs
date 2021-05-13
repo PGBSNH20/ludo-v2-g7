@@ -34,12 +34,15 @@ namespace LudoV2Api.Validations
         {
             if (position > 43 && teamColor == "Red")
             {
-                position = 44 + (position - 43);
-                var restMoves = position % 47;
+                var restMoves = position - 47;
 
-                if (restMoves > 0)
+                if (restMoves == 1)
                 {
-                    position = position - restMoves;
+                    position = 60;
+                }
+                else if (restMoves > 1)
+                {
+                    position = 47 - restMoves;
 
                     if (position < 44)
                     {
@@ -50,12 +53,20 @@ namespace LudoV2Api.Validations
 
             else if (position > 13 && teamColor == "Blue")
             {
-                position = 48 + (position - 13);
-                var restMoves = position % 51;
-
-                if (restMoves > 0)
+                if (position < 48)
                 {
-                    position = position - restMoves;
+                    position = 48 + (position - 14);
+                }
+
+                var restMoves = position - 51;
+
+                if (restMoves == 1)
+                {
+                    position = 60;
+                }
+                else if (restMoves > 0)
+                {
+                    position = 51 - restMoves;
 
                     if (position < 48)
                     {
@@ -66,12 +77,20 @@ namespace LudoV2Api.Validations
 
             else if (position > 23 && teamColor == "Green")
             {
-                position = 52 + (position - 23);
-                var restMoves = position % 55;
-
-                if (restMoves > 0)
+                if (position < 52)
                 {
-                    position = position - restMoves;
+                    position = 52 + (position - 24);
+                }
+
+                var restMoves = position - 55;
+
+                if (restMoves == 1)
+                {
+                    position = 60;
+                }
+                else if (restMoves > 0)
+                {
+                    position = 55 - restMoves;
 
                     if (position < 52)
                     {
@@ -82,12 +101,20 @@ namespace LudoV2Api.Validations
 
             else if (position > 33 && teamColor == "Yellow")
             {
-                position = 56 + (position - 33);
-                var restMoves = position % 59;
-
-                if (restMoves > 0)
+                if (position < 56)
                 {
-                    position = position - restMoves;
+                    position = 56 + (position - 34);
+                }
+
+                var restMoves = position - 59;
+
+                if (restMoves == 1)
+                {
+                    position = 60;
+                }
+                else if (restMoves > 0)
+                {
+                    position = 59 - restMoves;
 
                     if (position < 56)
                     {
