@@ -129,7 +129,7 @@ namespace LudoV2Api.Controllers
             {
                 int index = _turnOrder.IndexOf(teamColor);
 
-                if (index + 1 > 3)
+                if (index + 1 > game.NumberOfPlayers - 1)
                 {
                     index = 0;
                 }
@@ -210,7 +210,7 @@ namespace LudoV2Api.Controllers
                 {
                     int index = _turnOrder.IndexOf(teamColor);
 
-                    if (index + 1 > 3)
+                    if (index + 1 > game.NumberOfPlayers - 1)
                     {
                         index = 0;
                     }

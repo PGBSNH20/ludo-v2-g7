@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LudoV2Api.Models;
+using LudoV2Api.Models.ApiRequests;
 using LudoV2Api.Models.DbModels;
 
 namespace LudoV2Api.Controllers
@@ -76,8 +77,10 @@ namespace LudoV2Api.Controllers
         // POST: api/Games
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Game>> PostGame(Game game)
+        public async Task<ActionResult<NewGameRequest>> PostGame(NewGameRequest gameRequest)
         {
+            Game game = new() { CurrentTurn = gameRequest.CurrentTurn, NumberOfPlayers = gameRequest.NumberOfPlayers };
+
             string[] colors = new[] { "Red", "Blue", "Green", "Yellow" };
 
             _context.Games.Add(game);
@@ -87,7 +90,13 @@ namespace LudoV2Api.Controllers
 
                 for (int n = 0; n < 4; n++)
                 {
-                    Pawn pawn = new() { Game = game, Color = colors[i], Position = i };
+                    Pawn pawn;
+
+                    pawn = new() { Game = game, Color = colors[i], Position = i, EligibleForWin = false };
+                    if (colors[i] == "Red")
+                    {
+                        pawn = new() { Game = game, Color = colors[i], Position = i, EligibleForWin = true };
+                    }
                     _context.Pawns.Add(pawn);
                 }
             }

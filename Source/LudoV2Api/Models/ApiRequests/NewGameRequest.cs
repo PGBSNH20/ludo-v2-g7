@@ -7,6 +7,7 @@ namespace LudoV2Api.Models.ApiRequests
 {
     public class NewGameRequest
     {
-
+        public int NumberOfPlayers { get; set; }
+        public string CurrentTurn { get; set; }
     }
 }
