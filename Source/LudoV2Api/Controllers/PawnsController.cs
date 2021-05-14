@@ -91,7 +91,7 @@ namespace LudoV2Api.Controllers
 
             if (newPosition > 43 && teamColor != "Red" && pawn.EligibleForWin == false)
             {
-                newPosition = 4 + (newPosition - 43);
+                newPosition = 4 + (newPosition - 44);
                 pawn.EligibleForWin = true;
             }
 
