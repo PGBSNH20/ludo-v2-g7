@@ -5,6 +5,7 @@ namespace LudoV2Api.Models
     public class Game
     {
         public int Id { get; set; }
+        public string GameName { get; set; }
         public int NumberOfPlayers { get; set; }
         public string CurrentTurn { get; set; }
         public int? FirstPlace { get; set; }

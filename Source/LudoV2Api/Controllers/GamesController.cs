@@ -79,7 +79,7 @@ namespace LudoV2Api.Controllers
         [HttpPost]
         public async Task<ActionResult<NewGameRequest>> PostGame(NewGameRequest gameRequest)
         {
-            Game game = new() { CurrentTurn = gameRequest.CurrentTurn, NumberOfPlayers = gameRequest.NumberOfPlayers };
+            Game game = new() { CurrentTurn = gameRequest.CurrentTurn, NumberOfPlayers = gameRequest.NumberOfPlayers, GameName = gameRequest.GameName };
 
             string[] colors = new[] { "Red", "Blue", "Green", "Yellow" };
 

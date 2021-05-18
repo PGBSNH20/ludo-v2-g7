@@ -1,0 +1,26 @@
+﻿@page
+@model LudoV2Web.Pages.NewGameModel
+@{
+}
+
+<div>
+    <h1>Create a new Ludo Game</h1>
+
+    <form method="post">
+        <label for="gameName">Name the game</label>
+        <input asp-for="NewGame.GameName" type="text" name="gameName" placeholder="Name of the game" />
+
+        <label for="players">Number of players (between 2 and 4)</label>
+        <input value="4" type="range" name="players" min="2" max="4" />
+
+        <label for="startColor">select starting color</label>
+        <select name="startColor">
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+        </select>
+
+        <button type="submit">Start Game</button>
+    </form>
+</div>

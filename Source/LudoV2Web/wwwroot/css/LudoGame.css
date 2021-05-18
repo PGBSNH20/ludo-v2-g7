@@ -1,0 +1,113 @@
+﻿* {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+.game {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    position: relative;
+    width: 500px;
+    height: 500px;
+}
+
+.green {
+    background-color: green;
+}
+
+.red {
+    background-color: red;
+    border: none;
+}
+
+.yellow {
+    background-color: yellow;
+    border: none;
+}
+
+.blue {
+    background-color: blue;
+    border: none;
+}
+
+.house {
+    display: inline-block;
+    position: absolute;
+    width: 40%;
+    height: 40%;
+    padding: 7%;
+}
+
+.box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    padding: 20%;
+}
+
+.square {
+    position: absolute;
+    width: 25%;
+    height: 25%;
+}
+
+.square-one {
+    top: 20%;
+    left: 20%;
+}
+
+.square-two {
+    top: 20%;
+    right: 20%;
+}
+
+.square-three {
+    bottom: 20%;
+    left: 20%;
+}
+
+.square-four {
+    bottom: 20%;
+    right: 20%;
+}
+
+.home {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    width: 20%;
+    height: 20%;
+    border-top: 20px solid blue;
+    border-right: 20px solid green;
+    border-bottom: 20px solid yellow;
+    border-left: 20px solid red;
+}
+
+.cells {
+    position: absolute;
+    width: 6.66%;
+    height: 6.66%;
+    border-collapse: collapse;
+    border: 1.5px solid gray;
+}
+
+.g-start {
+    background-color: green;
+}
+
+.y-start {
+    background-color: yellow;
+}
+
+.r-start {
+    background-color: red;
+}
+
+.b-start {
+    background-color: blue;
+}
