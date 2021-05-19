@@ -11,8 +11,8 @@
     flex-wrap: wrap;
     margin: 20px auto;
     position: relative;
-    width: 500px;
-    height: 500px;
+    width: 700px;
+    height: 700px;
 }
 
 .green {
@@ -25,13 +25,29 @@
 }
 
 .yellow {
-    background-color: yellow;
+    background-color: #dde600;
     border: none;
 }
 
 .blue {
     background-color: blue;
     border: none;
+}
+
+.g-start {
+    background-color: green;
+}
+
+.y-start {
+    background-color: #dde600;
+}
+
+.r-start {
+    background-color: red;
+}
+
+.b-start {
+    background-color: blue;
 }
 
 .house {
@@ -50,42 +66,34 @@
     padding: 20%;
 }
 
+    .box div {
+        border-radius: 50%;
+    }
+
 .square {
     position: absolute;
     width: 25%;
     height: 25%;
 }
 
-.square-one {
+.square-1 {
     top: 20%;
     left: 20%;
 }
 
-.square-two {
+.square-2 {
     top: 20%;
     right: 20%;
 }
 
-.square-three {
+.square-3 {
     bottom: 20%;
     left: 20%;
 }
 
-.square-four {
+.square-4 {
     bottom: 20%;
     right: 20%;
-}
-
-.home {
-    position: absolute;
-    top: 40%;
-    left: 40%;
-    width: 20%;
-    height: 20%;
-    border-top: 20px solid blue;
-    border-right: 20px solid green;
-    border-bottom: 20px solid yellow;
-    border-left: 20px solid red;
 }
 
 .cells {
@@ -96,18 +104,10 @@
     border: 1.5px solid gray;
 }
 
-.g-start {
-    background-color: green;
-}
-
-.y-start {
-    background-color: yellow;
-}
-
-.r-start {
-    background-color: red;
-}
-
-.b-start {
-    background-color: blue;
+.pawn{
+    border-radius: 50%;
+    border: 3px solid black;
+    width: 30px;
+    height: 30px;
+    position: absolute;
 }

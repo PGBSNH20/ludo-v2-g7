@@ -24,5 +24,11 @@ namespace LudoV2Web.Pages
 
             Games = response.Data;
         }
+
+        public IActionResult OnPost(Game selectedGame)
+        {
+            Game Game = selectedGame;
+            return RedirectToPage("Ludo", new { Game });
+        }
     }
 }

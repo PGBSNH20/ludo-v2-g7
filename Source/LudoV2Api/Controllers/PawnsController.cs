@@ -41,9 +41,9 @@ namespace LudoV2Api.Controllers
 
         // GET: api/Pawns/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Pawn>> GetPawn(int id)
+        public async Task<ActionResult<IEnumerable<Pawn>>> GetPawnsForGame(int id)
         {
-            var pawn = await _context.Pawns.FindAsync(id);
+            var pawn = await _context.Pawns.Where(x => x.Game.Id == id).ToListAsync();
 
             if (pawn == null)
             {

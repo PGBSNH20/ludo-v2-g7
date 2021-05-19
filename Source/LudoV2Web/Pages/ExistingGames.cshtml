@@ -10,7 +10,7 @@
         <p>@game.Id</p>
         <p>current turn: @game.CurrentTurn</p>
 
-        <form asp-page="/Ludo" method="post">
+        <form method="post">
             <input type="hidden" asp-for="Game.Id" value="@game.Id" />
             <input type="hidden" asp-for="Game.CurrentTurn" value="@game.CurrentTurn" />
             <input type="hidden" asp-for="Game.NumberOfPlayers" value="@game.NumberOfPlayers" />
