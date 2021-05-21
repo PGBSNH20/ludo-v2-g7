@@ -4,7 +4,7 @@
 }
 <link rel="stylesheet" href="~/css/LudoGame.css" />
 
-<h1>@Model.Title</h1>
+<h1 id="title">@Model.Title</h1>
 <p>Current turn: @Model.Game.CurrentTurn</p>
 <form method="post">
     <input asp-for="@Model.MovePawn.GameId" type="hidden" value="@Model.Game.Id" />
@@ -12,8 +12,9 @@
     <input id="pawnPositionValue" asp-for="@Model.MovePawn.Position" type="hidden" value="0" />
     <input id="pawnIdValue" asp-for="@Model.MovePawn.PawnId" type="hidden" value="0" />
     <input id="diceValue" asp-for="@Model.MovePawn.Dice" type="hidden" value="0" />
+    <input id="pawnBasePosition" type="hidden" value="0" />
 
-    <button id="movePawnButton" type="submit" disabled>Move Pawn</button>
+    <button id="movePawnButton" type="submit" disabled onclick="test()">Move Pawn</button>
 </form>
 
 <button id="diceButton" onclick="DiceRoll()">Roll Dice</button>
@@ -194,8 +195,30 @@
     <div id="43" class="cells" style="top: 46.66%;left:13.32%;"></div>
 </div>
 
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-2">Message</div>
+        <div class="col-4"><input type="text" id="messageInput" /></div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <div class="row">
+        <div class="col-6">
+            <input type="button" id="sendButton" value="Send Message" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <ul id="messagesList"></ul>
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/LudoGame.js"></script>
+
 
 @{
     i = 1;
@@ -205,16 +228,13 @@
 {
     @if (item.Position > 3)
     {
-        var position = item.Position;
-        var pawnId = item.Color.ToLower() + i;
-        var startBase = "square-" + i + " " + "'" + item.Color.ToLower() + "'";
-<script type="text/javascript">
+        <script type="text/javascript">
             var position = @item.Position;
             var pawnId = "@item.Color.ToLower()" + "@i";
             var startBase = "square-" + @i + " " + "@item.Color.ToLower()";
 
             MovePawn(position, pawnId, startBase);
-</script>
+        </script>
     }
 
     @if (i < 4)
