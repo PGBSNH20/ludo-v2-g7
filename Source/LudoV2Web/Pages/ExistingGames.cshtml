@@ -7,18 +7,18 @@
 <div>
     @foreach (var game in @Model.Games)
     {
-        <p>@game.Id</p>
+        <p>@game.GameName</p>
         <p>current turn: @game.CurrentTurn</p>
 
         <form method="post">
-            <input type="hidden" asp-for="Game.Id" value="@game.Id" />
-            <input type="hidden" asp-for="Game.CurrentTurn" value="@game.CurrentTurn" />
-            <input type="hidden" asp-for="Game.NumberOfPlayers" value="@game.NumberOfPlayers" />
-            <input type="hidden" asp-for="Game.LastSaved" value="@game.LastSaved" />
-            <input type="hidden" asp-for="Game.FirstPlace" value="@game.FirstPlace" />
-            <input type="hidden" asp-for="Game.SecondPlace" value="@game.SecondPlace" />
-            <input type="hidden" asp-for="Game.ThirdPlace" value="@game.ThirdPlace" />
-            <input type="hidden" asp-for="Game.FourthPlace" value="@game.FourthPlace" />
+            <input type="hidden" asp-for="@Model.Game.Id" value="@game.Id" />
+            <input type="hidden" asp-for="@Model.Game.CurrentTurn" value="@game.CurrentTurn" />
+            <input type="hidden" asp-for="@Model.Game.NumberOfPlayers" value="@game.NumberOfPlayers" />
+            <input type="hidden" asp-for="@Model.Game.FirstPlace" value="@game.FirstPlace" />
+            <input type="hidden" asp-for="@Model.Game.SecondPlace" value="@game.SecondPlace" />
+            <input type="hidden" asp-for="@Model.Game.ThirdPlace" value="@game.ThirdPlace" />
+            <input type="hidden" asp-for="@Model.Game.FourthPlace" value="@game.FourthPlace" />
+            <input type="hidden" asp-for="@Model.Game.GameName" value="@game.GameName" />
             <button type="submit">Play</button>
         </form>
 

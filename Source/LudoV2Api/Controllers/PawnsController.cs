@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LudoV2Api.Models;
 using LudoV2Api.Models.DbModels;
 using LudoV2Api.Validations;
+using LudoV2Api.Models.ApiRequests;
+
 namespace LudoV2Api.Controllers
 {
     [Route("api/[controller]")]
@@ -15,15 +17,15 @@ namespace LudoV2Api.Controllers
     public class PawnsController : ControllerBase
     {
         private readonly LudoContext _context;
-        private List<string> _turnOrder = new() { "Red", "Blue", "Green", "Yellow" };
+        private List<string> _turnOrder = new() { "red", "blue", "green", "yellow" };
         private int _sixesRolled = 0;
 
         private Dictionary<string, int> _pawnBases = new()
         {
-            { "Red", 0 },
-            { "Blue", 1 },
-            { "Green", 2 },
-            { "Yellow", 3 }
+            { "red", 0 },
+            { "blue", 1 },
+            { "green", 2 },
+            { "yellow", 3 }
         };
 
 
@@ -55,41 +57,40 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/move
         [HttpPut("move")]
-        public async Task<IActionResult> PutMovePawn(int dice, int id, int position, string teamColor, int gameId)
+        public async Task<IActionResult> PutMovePawn(/*int dice, int pawnId, int position, string teamColor, int gameId*/ MovePawnRequest pawnRequest)
         {
-
-            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameId, teamColor);
+            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, pawnRequest.GameId, pawnRequest.TeamColor);
 
             if (!canPlay)
             {
                 return BadRequest("It's not your turn");
             }
 
-            var validateDice = ControllerMethods.ValidateDice(dice);
+            var validateDice = ControllerMethods.ValidateDice(pawnRequest.Dice);
 
             if (!validateDice)
             {
                 return BadRequest("You must roll between 1 and 6");
             }
 
-            int basePosition = _pawnBases[teamColor];
+            int basePosition = _pawnBases[pawnRequest.TeamColor.ToLower()] ;
 
             var pawnsInBase = _context.Pawns.Where(x => x.Position == basePosition).Count();
 
-            if (pawnsInBase == 4 && dice != 6 && dice != 1)
+            if (pawnsInBase == 4 && pawnRequest.Dice != 6 && pawnRequest.Dice != 1)
             {
                 return BadRequest("No pawns on the field to move");
             }
 
-            else if (position == basePosition)
+            else if (pawnRequest.Position == basePosition)
             {
                 return BadRequest("Use /movefrombase to move pawns from base");
             }
 
-            int newPosition = position + dice;
-            var pawn = await _context.Pawns.FindAsync(id);
+            int newPosition = pawnRequest.Position + pawnRequest.Dice;
+            var pawn = await _context.Pawns.FindAsync(pawnRequest.PawnId);
 
-            if (newPosition > 43 && teamColor != "Red" && pawn.EligibleForWin == false)
+            if (newPosition > 43 && pawnRequest.TeamColor.ToLower() != "red" && pawn.EligibleForWin == false)
             {
                 newPosition = 4 + (newPosition - 44);
                 pawn.EligibleForWin = true;
@@ -97,14 +98,14 @@ namespace LudoV2Api.Controllers
 
             if (pawn.EligibleForWin)
             {
-                newPosition = ControllerMethods.PawnSafeZone(newPosition, teamColor);
+                newPosition = ControllerMethods.PawnSafeZone(newPosition, pawnRequest.TeamColor);
             }
 
             Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
 
             if (existsOnPosition != null)
             {
-                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(teamColor, existsOnPosition, newPosition);
+                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(pawnRequest.TeamColor, existsOnPosition, newPosition);
 
                 if (knockedOutPosition.Position == -2)
                 {
@@ -118,16 +119,16 @@ namespace LudoV2Api.Controllers
 
             pawn.Position = newPosition;
 
-            var game = await _context.Games.FindAsync(gameId);
+            var game = await _context.Games.FindAsync(pawnRequest.GameId);
 
-            if (dice == 6)
+            if (pawnRequest.Dice == 6)
             {
                 _sixesRolled++;
             }
 
             if (_sixesRolled >= 2 || _sixesRolled == 0)
             {
-                int index = _turnOrder.IndexOf(teamColor);
+                int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
 
                 if (index + 1 > game.NumberOfPlayers - 1)
                 {
@@ -143,7 +144,7 @@ namespace LudoV2Api.Controllers
             }
             else if (_sixesRolled > 0)
             {
-                game.CurrentTurn = teamColor;
+                game.CurrentTurn = pawnRequest.TeamColor;
             }
 
             _context.SaveChanges();
@@ -152,39 +153,39 @@ namespace LudoV2Api.Controllers
         }
 
         [HttpPut("movefrombase")]
-        public async Task<IActionResult> PutPawnFromBase(int gameId, int pawnId, int dice, string teamColor)
+        public async Task<IActionResult> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
         {
 
             Dictionary<string, int> pawnStartPosition = new()
             {
-                { "Red", 4 },
-                { "Blue", 14 },
-                { "Green", 24 },
-                { "Yellow", 34 }
+                { "red", 4 },
+                { "blue", 14 },
+                { "green", 24 },
+                { "yellow", 34 }
             };
 
-            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, gameId, teamColor);
+            var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, pawnRequest.GameId, pawnRequest.TeamColor);
 
             if (!canPlay)
             {
                 return BadRequest("Not your turn");
             }
 
-            var validateDice = ControllerMethods.ValidateDice(dice);
+            var validateDice = ControllerMethods.ValidateDice(pawnRequest.Dice);
 
             if (!validateDice)
             {
                 return BadRequest("You must roll between 1 and 6");
             }
 
-            var pawnToMove = await _context.Pawns.FindAsync(pawnId);
+            var pawnToMove = await _context.Pawns.FindAsync(pawnRequest.PawnId);
 
-            if (dice == 1)
+            if (pawnRequest.Dice == 1)
             {
-                pawnToMove.Position = pawnStartPosition[pawnToMove.Color];
-                var game = await _context.Games.FindAsync(gameId);
+                pawnToMove.Position = pawnStartPosition[pawnToMove.Color.ToLower()];
+                var game = await _context.Games.FindAsync(pawnRequest.GameId);
 
-                int index = _turnOrder.IndexOf(teamColor);
+                int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
 
                 if (index + 1 > 3)
                 {
@@ -200,15 +201,15 @@ namespace LudoV2Api.Controllers
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
-            else if (dice == 6)
+            else if (pawnRequest.Dice == 6)
             {
                 _sixesRolled++;
-                pawnToMove.Position = pawnStartPosition[pawnToMove.Color] + 5;
-                var game = await _context.Games.FindAsync(gameId);
+                pawnToMove.Position = pawnStartPosition[pawnToMove.Color.ToLower()] + 5;
+                var game = await _context.Games.FindAsync(pawnRequest.GameId);
 
                 if (_sixesRolled < 2)
                 {
-                    int index = _turnOrder.IndexOf(teamColor);
+                    int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
 
                     if (index + 1 > game.NumberOfPlayers - 1)
                     {
@@ -224,7 +225,7 @@ namespace LudoV2Api.Controllers
                 }
                 else
                 {
-                    game.CurrentTurn = teamColor;
+                    game.CurrentTurn = pawnRequest.TeamColor;
                 }
 
                 await _context.SaveChangesAsync();

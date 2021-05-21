@@ -14,7 +14,7 @@ namespace LudoV2Api.Validations
         {
             var currentTurn = context.Games.Where(v => v.Id == gameid).Select(x => x.CurrentTurn).FirstOrDefault();
 
-            if (currentTurn != teamColor)
+            if (currentTurn.ToLower() != teamColor.ToLower())
             {
                 return false;
             }
@@ -130,30 +130,30 @@ namespace LudoV2Api.Validations
         {
             int knockedOutBasePosition = -1;
 
-            if (existsOnPosition.Color == teamColor)
+            if (existsOnPosition.Color.ToLower() == teamColor.ToLower())
             {
                 existsOnPosition.Position = -2;
                 return existsOnPosition;
             }
 
-            else if (existsOnPosition.Position == newPosition && existsOnPosition.Color != teamColor)
+            else if (existsOnPosition.Position == newPosition && existsOnPosition.Color.ToLower() != teamColor.ToLower())
             {
-                if (existsOnPosition.Color == "Red")
+                if (existsOnPosition.Color.ToLower() == "red")
                 {
                     knockedOutBasePosition = 0;
                     existsOnPosition.EligibleForWin = true;
                 }
-                else if (existsOnPosition.Color == "Blue")
+                else if (existsOnPosition.Color.ToLower() == "blue")
                 {
                     knockedOutBasePosition = 1;
                     existsOnPosition.EligibleForWin = false;
                 }
-                else if (existsOnPosition.Color == "Green")
+                else if (existsOnPosition.Color.ToLower() == "green")
                 {
                     knockedOutBasePosition = 2;
                     existsOnPosition.EligibleForWin = false;
                 }
-                else if (existsOnPosition.Color == "Yellow")
+                else if (existsOnPosition.Color.ToLower() == "yellow")
                 {
                     knockedOutBasePosition = 3;
                     existsOnPosition.EligibleForWin = false;
