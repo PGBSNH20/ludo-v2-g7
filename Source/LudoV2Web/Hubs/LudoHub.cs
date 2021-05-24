@@ -9,12 +9,12 @@ namespace LudoV2Web.Hubs
     public class LudoHub : Hub
     {
 
-        public async Task MovePawns(string groupName)
+        public async Task MovePawns(string groupName, int position, string pawnToMove, string pawnBase, string CurrentTurn)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
 
-            await Clients.Group(groupName).SendAsync("Move", "test");
-            
+            await Clients.Group(groupName).SendAsync("Move", position, pawnToMove, pawnBase, CurrentTurn);
+
         }
 
         public async Task AddToGroup(string groupName)

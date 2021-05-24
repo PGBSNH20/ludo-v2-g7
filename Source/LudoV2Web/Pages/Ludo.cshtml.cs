@@ -73,7 +73,7 @@ namespace LudoV2Web.Pages
         public async Task<List<Pawn>> FindPawns(int gameId)
         {
             var client = new RestClient("https://localhost:5001/api/");
-            var request = new RestRequest("Pawns/" + gameId, DataFormat.Json);
+            var request = new RestRequest("Pawns/game/" + gameId, DataFormat.Json);
             var response = await client.GetAsync<List<Pawn>>(request);
 
             return response;

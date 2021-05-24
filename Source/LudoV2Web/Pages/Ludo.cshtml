@@ -5,16 +5,16 @@
 <link rel="stylesheet" href="~/css/LudoGame.css" />
 
 <h1 id="title">@Model.Title</h1>
-<p>Current turn: @Model.Game.CurrentTurn</p>
-<form method="post">
-    <input asp-for="@Model.MovePawn.GameId" type="hidden" value="@Model.Game.Id" />
+<p id="cuttentTurn">Current turn: @Model.Game.CurrentTurn</p>
+<form>
+    <input id="gameIdValue" asp-for="@Model.MovePawn.GameId" type="hidden" value="@Model.Game.Id" />
     <input id="pawnColorValue" asp-for="@Model.MovePawn.TeamColor" type="hidden" value="0" />
     <input id="pawnPositionValue" asp-for="@Model.MovePawn.Position" type="hidden" value="0" />
     <input id="pawnIdValue" asp-for="@Model.MovePawn.PawnId" type="hidden" value="0" />
     <input id="diceValue" asp-for="@Model.MovePawn.Dice" type="hidden" value="0" />
     <input id="pawnBasePosition" type="hidden" value="0" />
 
-    <button id="movePawnButton" type="submit" disabled onclick="test()">Move Pawn</button>
+    <button id="movePawnButton" type="button" disabled onclick="PostLudoData()">Move Pawn</button>
 </form>
 
 <button id="diceButton" onclick="DiceRoll()">Roll Dice</button>
@@ -48,11 +48,11 @@
             {
                 if (redPawns[k].Position < 4)
                 {
-                    <div id="@redPawns[k].Id" class="red basePawn square square@(k + 1)"></div>
+                    <div id="@redPawns[k].Id" class="red basePawn square pawn@(k + 1)"></div>
                 }
                 else
                 {
-                    <div id="@redPawns[k].Id" class="red basePawn square square@(k + 1)" style="display: none;"></div>
+                    <div id="@redPawns[k].Id" class="red basePawn square pawn@(k + 1)" style="display: none;"></div>
 
                 }
             }
@@ -68,11 +68,11 @@
             {
                 if (bluePawns[k].Position < 4)
                 {
-                    <div id="@bluePawns[k].Id" class="blue basePawn square square@(k + 1)"></div>
+                    <div id="@bluePawns[k].Id" class="blue basePawn square pawn@(k + 1)"></div>
                 }
                 else
                 {
-                    <div id="@bluePawns[k].Id" class="blue basePawn square square@(k + 1)" style="display: none;"></div>
+                    <div id="@bluePawns[k].Id" class="blue basePawn square pawn@(k + 1)" style="display: none;"></div>
 
                 }
             }
@@ -88,11 +88,11 @@
             {
                 if (yellowPawns[k].Position < 4)
                 {
-                    <div id="@yellowPawns[k].Id" class="yellow basePawn square square@(k + 1)"></div>
+                    <div id="@yellowPawns[k].Id" class="yellow basePawn square pawn@(k + 1)"></div>
                 }
                 else
                 {
-                    <div id="@yellowPawns[k].Id" class="yellow basePawn square square@(k + 1)" style="display: none;"></div>
+                    <div id="@yellowPawns[k].Id" class="yellow basePawn square pawn@(k + 1)" style="display: none;"></div>
 
                 }
             }
@@ -108,11 +108,11 @@
             {
                 if (greenPawns[k].Position < 4)
                 {
-                    <div id="@greenPawns[k].Id" class="green basePawn square@(k + 1)"></div>
+                    <div id="@greenPawns[k].Id" class="green basePawn pawn@(k + 1)"></div>
                 }
                 else
                 {
-                    <div id="@greenPawns[k].Id" class="green basePawn square square@(k + 1)" style="display: none;"></div>
+                    <div id="@greenPawns[k].Id" class="green basePawn square pawn@(k + 1)" style="display: none;"></div>
 
                 }
             }
@@ -215,6 +215,7 @@
     </div>
 </div>
 
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/LudoGame.js"></script>
@@ -231,7 +232,7 @@
         <script type="text/javascript">
             var position = @item.Position;
             var pawnId = "@item.Color.ToLower()" + "@i";
-            var startBase = "square-" + @i + " " + "@item.Color.ToLower()";
+            var startBase = "pawn" + @i + " " + "@item.Color.ToLower()";
 
             MovePawn(position, pawnId, startBase);
         </script>

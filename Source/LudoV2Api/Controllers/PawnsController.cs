@@ -9,11 +9,13 @@ using LudoV2Api.Models;
 using LudoV2Api.Models.DbModels;
 using LudoV2Api.Validations;
 using LudoV2Api.Models.ApiRequests;
+using Microsoft.AspNetCore.Cors;
 
 namespace LudoV2Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors]
     public class PawnsController : ControllerBase
     {
         private readonly LudoContext _context;
@@ -34,6 +36,13 @@ namespace LudoV2Api.Controllers
             _context = context;
         }
 
+        //OPTIONS: api/Pawns/move
+        [HttpOptions]
+        public IActionResult PreflightRoute()
+        {
+            return NoContent();
+        }
+
         // GET: api/Pawns
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pawn>>> GetPawnSavePoints()
@@ -43,6 +52,20 @@ namespace LudoV2Api.Controllers
 
         // GET: api/Pawns/5
         [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<Pawn>>> GetPawn(int id)
+        {
+            var pawn = await _context.Pawns.Where(x => x.Id == id).ToListAsync();
+
+            if (pawn == null)
+            {
+                return NotFound();
+            }
+
+            return pawn;
+        }
+
+        // GET: api/Pawns/game/5
+        [HttpGet("game/{id}")]
         public async Task<ActionResult<IEnumerable<Pawn>>> GetPawnsForGame(int id)
         {
             var pawn = await _context.Pawns.Where(x => x.Game.Id == id).ToListAsync();
@@ -57,7 +80,7 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/move
         [HttpPut("move")]
-        public async Task<IActionResult> PutMovePawn(/*int dice, int pawnId, int position, string teamColor, int gameId*/ MovePawnRequest pawnRequest)
+        public async Task<ActionResult<IEnumerable<MovePawnReturnRequest>>> PutMovePawn(/*int dice, int pawnId, int position, string teamColor, int gameId*/ MovePawnRequest pawnRequest)
         {
             var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, pawnRequest.GameId, pawnRequest.TeamColor);
 
@@ -149,7 +172,19 @@ namespace LudoV2Api.Controllers
 
             _context.SaveChanges();
 
-            return NoContent();
+            MovePawnReturnRequest movedPawns = new();
+
+            movedPawns.PawnPosition = pawn.Position;
+            movedPawns.CurrentTurn = game.CurrentTurn;
+            movedPawns.KnockedPawnPosition = -1;
+
+
+            if (existsOnPosition != null)
+            {
+                movedPawns.KnockedPawnPosition = existsOnPosition.Position;
+            }
+
+            return Ok(movedPawns);
         }
 
         [HttpPut("movefrombase")]

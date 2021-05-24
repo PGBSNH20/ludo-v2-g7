@@ -1,17 +1,16 @@
 ﻿
-function PawnMoveHelper(p, bC) {
-    p.style.margin = "8px";
-    p.style.zIndex = 100;
-    if (bc.style != undefined) {
-        bC.style.display = "none";
+function PawnMoveHelper(basePawn, baseSquare) {
+    basePawn.style.margin = "8px";
+    basePawn.style.zIndex = 100;
+    if (baseSquare.style.display != "none") {
+        baseSquare.style.display = "none";
     }
 }
 
 function MovePawn(squareID, pawnToMove, baseCircleClasses) {
-
     const square = document.getElementById(squareID);
     const pawn = document.getElementsByClassName(pawnToMove);
-    const baseCircle = document.getElementsByClassName(baseCircleClasses + " basePawn " + "square" );
+    const baseCircle = document.getElementsByClassName(baseCircleClasses + " basePawn");
 
     let squareTop = square.style.top;
     let squareRight = square.style.right;
@@ -94,6 +93,46 @@ function RemoveDisableFromButton() {
     }
 }
 
+async function PostLudoData() {
+    const diceRoll = document.getElementById("diceValue").value;
+    const pawnId = document.getElementById("pawnIdValue").value
+    const position = document.getElementById("pawnPositionValue").value
+    const teamColor = document.getElementById("pawnColorValue").value
+    const gameId = document.getElementById("gameIdValue").value
+    const pawn = document.getElementById(pawnId);
+    const baseCircleClasses = teamColor + " " + "pawn" + pawn.className.split(" ")[2].slice(-1);
+
+    const putData = { Dice: diceRoll, PawnId: pawnId, Position: position, TeamColor: teamColor, GameId: gameId}
+    await fetch("https://localhost:5001/api/Pawns/move", {
+        method: "PUT",
+        headers: {
+            "content-Type": "application/json"
+        },
+        body: JSON.stringify(putData)
+    }).then(response => response.json().then(data => {
+        if (data.knockedPawnPosition < 0) {
+            //MovePawn(data[0], pawn.className.split(" ")[2], baseCircleClasses)
+            signalrMove(data.pawnPosition, pawn.className.split(" ")[2], baseCircleClasses, data.currentTurn);
+            return;
+        }
+    }));
+}
+
+function ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn) {
+    document.getElementById("pawnColorValue").value = 0;
+    document.getElementById("pawnPositionValue").value = 0;
+    document.getElementById("pawnIdValue").value = 0;
+    document.getElementById("pawnBasePosition").value = 0;
+    document.getElementById("diceRoll").textContent = "Dice roll: ";
+    document.getElementById("diceValue").value = 0;
+
+    document.getElementById("diceButton").disabled = false;
+    document.getElementById("movePawnButton").disabled = true;
+
+    document.getElementById("cuttentTurn").innerHTML = "Current turn " + currentTurn;
+
+}
+
 $(document).ready(function () {
     $("div.pawn").click(function () {
         GetPawnValues(event.target);
@@ -108,12 +147,14 @@ $(document).ready(function () {
 let connection = new signalR.HubConnectionBuilder().withUrl("/Ludo").build();
 
 
-connection.on("Move", function (message) {
-    let position = document.getelementbyid("pawnPositionValue").value;
-    let pawntomove = document.getelementbyid("pawnIdValue").value;
-    let pawnbaseposition = document.getelementbyid("pawnBasePosition").value;
+connection.on("Move", function (positionValue, pawnToMoveValue, pawnBaseValue, currentTurn) {
+    
+    let position = positionValue;
+    let pawnToMove = pawnToMoveValue;
+    let pawnBasePosition = pawnBaseValue;
 
-    movepawn(position, pawntomove, pawnbaseposition);
+    MovePawn(position, pawnToMove, pawnBasePosition);
+    ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn);
 });
 
 connection.start().then(function () {
@@ -122,16 +163,14 @@ connection.start().then(function () {
     return console.log(err.toString());
 });
 
-/*document.getElementById("movePawnButton").addEventListener("click", */function test(event) {
+function signalrMove(positionValue, pawnToMoveValue, pawnBaseValue, currentTurn) {
 
-    let title = document.getElementById("title").textContent;
+    const title = document.getElementById("title").textContent;
     //connection.invoke("AddToGroup", title).catch(function (err) {
     //    return console.error(err.toString());
     //});
 
-    connection.invoke("MovePawns", title).catch(function (err) {
+    connection.invoke("MovePawns", title, positionValue, pawnToMoveValue, pawnBaseValue, currentTurn).catch(function (err) {
         return console.error(err.toString());
     });
-    event.preventDefault();
 };
-//);

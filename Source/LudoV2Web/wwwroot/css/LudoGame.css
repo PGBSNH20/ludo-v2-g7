@@ -75,22 +75,22 @@
     height: 25%;
 }
 
-.square1 {
+.pawn1 {
     top: 20%;
     left: 20%;
 }
 
-.square2 {
+.pawn2 {
     top: 20%;
     right: 20%;
 }
 
-.square3 {
+.pawn3 {
     bottom: 20%;
     left: 20%;
 }
 
-.square4 {
+.pawn4 {
     bottom: 20%;
     right: 20%;
 }
