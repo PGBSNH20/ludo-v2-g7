@@ -46,7 +46,7 @@ namespace LudoV2Api.Controllers
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGame(int id, Game game, int dice)
+        public async Task<IActionResult> PutGame(int id, Game game)
         {
             if (id != game.Id)
             {
@@ -104,22 +104,6 @@ namespace LudoV2Api.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGame", new { id = game.Id }, game);
-        }
-
-        // DELETE: api/Games/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id)
-        {
-            var game = await _context.Games.FindAsync(id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool GameExists(int id)

@@ -52,7 +52,7 @@ namespace LudoV2Api.Controllers
 
         // GET: api/Pawns/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Pawn>>> GetPawn(int id)
+        public async Task<ActionResult<Pawn>> GetPawn(int id)
         {
             var pawn = await _context.Pawns.Where(x => x.Id == id).ToListAsync();
 
@@ -61,7 +61,7 @@ namespace LudoV2Api.Controllers
                 return NotFound();
             }
 
-            return pawn;
+            return pawn.First();
         }
 
         // GET: api/Pawns/game/5
@@ -80,7 +80,7 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/move
         [HttpPut("move")]
-        public async Task<ActionResult<IEnumerable<MovePawnReturnRequest>>> PutMovePawn(/*int dice, int pawnId, int position, string teamColor, int gameId*/ MovePawnRequest pawnRequest)
+        public async Task<ActionResult<MovePawnReturnRequest>> PutMovePawn(MovePawnRequest pawnRequest)
         {
             var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, pawnRequest.GameId, pawnRequest.TeamColor);
 
@@ -179,7 +179,7 @@ namespace LudoV2Api.Controllers
         }
 
         [HttpPut("movefrombase")]
-        public async Task<ActionResult<IEnumerable<MovePawnReturnRequest>>> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
+        public async Task<ActionResult<MovePawnReturnRequest>> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
         {
 
             Dictionary<string, int> pawnStartPosition = new()
@@ -267,37 +267,6 @@ namespace LudoV2Api.Controllers
             }
         }
 
-        // PUT: api/Pawns/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPawn(int id, Pawn pawn)
-        {
-            if (id != pawn.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pawn).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PawnExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Pawns
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -307,22 +276,6 @@ namespace LudoV2Api.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPawn", new { id = pawn.Id }, pawn);
-        }
-
-        // DELETE: api/Pawns/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePawn(int id)
-        {
-            var pawn = await _context.Pawns.FindAsync(id);
-            if (pawn == null)
-            {
-                return NotFound();
-            }
-
-            _context.Pawns.Remove(pawn);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool PawnExists(int id)

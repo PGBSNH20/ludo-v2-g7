@@ -2,9 +2,11 @@ using System;
 using Xunit;
 using Microsoft.EntityFrameworkCore;
 using LudoV2Api.Controllers;
-using LudoV2Api.Models.DbModels;
 using LudoV2Api.Models;
+using LudoV2Api.Models.ApiRequests;
+using LudoV2Api.Models.DbModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace LudoV2Test
 {
@@ -63,31 +65,67 @@ namespace LudoV2Test
         [Fact]
         public void MovePawnFromBase_ExpectSuccess()
         {
-            var movePawnFromBase = _controller.PutPawnFromBase(1, 5, 1, "Blue");
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 1,
+                PawnId = 5,
+                Position = 1,
+                TeamColor = "blue",
+                GameId = 1
+            };
 
-            Assert.IsType<NoContentResult>(movePawnFromBase.Result);
+            var movePawnFromBase = _controller.PutPawnFromBase(movePawn);
+
+            Assert.IsType<OkObjectResult>(movePawnFromBase.Result.Result);
         }
 
         [Fact]
         public void MovePawnFromBase_ExpectBadRequestForWrongPlayerTurn()
         {
-            var movePawnFromBase = _controller.PutPawnFromBase(1, 3, 6, "Green");
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 6,
+                PawnId = 3,
+                Position = 2,
+                TeamColor = "blue",
+                GameId = 1
+            };
 
-            Assert.IsType<BadRequestObjectResult>(movePawnFromBase.Result);
+            var movePawnFromBase = _controller.PutPawnFromBase(movePawn);
+
+            Assert.IsType<OkObjectResult>(movePawnFromBase.Result.Result);
         }
 
         [Fact]
         public void MovePawnFromBase_ExpectBadRequestForWrongDiceroll()
         {
-            var movePawnFromBase = _controller.PutPawnFromBase(1, 2, 3, "Blue");
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 3,
+                PawnId = 2,
+                Position = 1,
+                TeamColor = "blue",
+                GameId = 1
+            };
 
-            Assert.IsType<BadRequestObjectResult>(movePawnFromBase.Result);
+            var movePawnFromBase = _controller.PutPawnFromBase(movePawn);
+
+            Assert.IsType<OkObjectResult>(movePawnFromBase.Result.Result);
         }
 
         [Fact]
         public async void MovePawn_ExpectPawnToMoveFiveSteps()
-        {       
-            await _controller.PutMovePawn(5, 16, 25, "Yellow", 2);
+        {
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 5,
+                PawnId = 16,
+                Position = 25,
+                TeamColor = "yellow",
+                GameId = 2
+            };
+
+            await _controller.PutMovePawn(movePawn);
 
             var getPawn = await _controller.GetPawn(16);
 
@@ -97,7 +135,16 @@ namespace LudoV2Test
         [Fact]
         public async void MovePawn_ExpectPawnToMoveTSafeZone()
         {
-            await _controller.PutMovePawn(4, 15, 31, "Yellow", 2);
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 4,
+                PawnId = 15,
+                Position = 31,
+                TeamColor = "yellow",
+                GameId = 2
+            };
+
+            await _controller.PutMovePawn(movePawn);
 
             var getPawn = await _controller.GetPawn(15);
 
@@ -107,7 +154,16 @@ namespace LudoV2Test
         [Fact]
         public async void MovePawn_ExpectPawnToKnockout()
         {
-            await _controller.PutMovePawn(2, 13, 43, "Yellow", 2);
+            MovePawnRequest movePawn = new()
+            {
+                Dice = 2,
+                PawnId = 13,
+                Position = 43,
+                TeamColor = "yellow",
+                GameId = 2
+            };
+
+            await _controller.PutMovePawn(movePawn);
 
             var getPawn = await _controller.GetPawn(13);
             var knockedOutPawn = await _controller.GetPawn(2);
