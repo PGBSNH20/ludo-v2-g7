@@ -39,8 +39,9 @@ Flyttar ut en spelpjäs från startposition.
 ```
 
 ## Exempel på begäran
-
+```
 https://localhost:44347/api/Games 
+```
 
 Det här är ett exempel på vad som kan skickas med i HTTP request bodyn  
 ```
@@ -52,8 +53,9 @@ Det här är ett exempel på vad som kan skickas med i HTTP request bodyn
 ```
 
 
-## Exempel på svar:
+## Exempel på svar:  
 
+Response body
 ```
     {
       "id": 2,
@@ -67,6 +69,15 @@ Det här är ett exempel på vad som kan skickas med i HTTP request bodyn
       "lastSaved": "0001-01-01T00:00:00"
     }
 ```
+Response headers
+```
+    content-type: application/json; charset=utf-8 
+    date: Tue,25 May 2021 14:13:33 GMT 
+    location: https://localhost:44347/api/Games/2 
+    server: Microsoft-IIS/10.0 
+    x-powered-by: ASP.NET 
+```
+
 
 
 ## Frontend
