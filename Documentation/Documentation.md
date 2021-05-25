@@ -36,13 +36,15 @@ Flyttar en specifik spelpjäs och knffar ut en annan om det behövs.
 PUT: apu/Pawns/movefrombase
 Flyttar ut en spelpjäs från startposition.
 
-----------------------------------------------------------------------------
+```
 
 ## Frontend
 
-Vi använder RazorPages, HTML, JavaScript, css, JQuery och SignalR.  
+Vi använder RazorPages, HTML, JavaScript, css, JQuery och SignalR.
+
+Läs mer om frontend dokumentationen [här](Frontend.md)
     
-```
+
 
 
 
