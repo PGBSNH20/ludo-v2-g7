@@ -38,6 +38,37 @@ Flyttar ut en spelpjäs från startposition.
 
 ```
 
+## Exempel på begäran
+
+https://localhost:44347/api/Games 
+
+Det här är ett exempel på vad som kan skickas med i HTTP request bodyn  
+```
+    {
+      "gameName": "Hejhej",
+      "numberOfPlayers": 4,
+      "currentTurn": "red"
+    }
+```
+
+
+## Exempel på svar:
+
+```
+    {
+      "id": 2,
+      "gameName": "Hejhej",
+      "numberOfPlayers": 4,
+      "currentTurn": "red",
+      "firstPlace": null,
+      "secondPlace": null,
+      "thirdPlace": null,
+      "fourthPlace": null,
+      "lastSaved": "0001-01-01T00:00:00"
+    }
+```
+
+
 ## Frontend
 
 Vi använder RazorPages, HTML, JavaScript, css, JQuery och SignalR.
