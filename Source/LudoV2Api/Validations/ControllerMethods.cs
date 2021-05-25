@@ -32,7 +32,7 @@ namespace LudoV2Api.Validations
 
         public static int PawnSafeZone(int position, string teamColor)
         {
-            if (position > 43 && teamColor == "Red")
+            if (position > 43 && teamColor.ToLower() == "red")
             {
                 var restMoves = position - 47;
 
@@ -51,7 +51,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 13 && teamColor == "Blue")
+            else if (position > 13 && teamColor.ToLower() == "blue")
             {
                 if (position < 48)
                 {
@@ -75,7 +75,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 23 && teamColor == "Green")
+            else if (position > 23 && teamColor.ToLower() == "green")
             {
                 if (position < 52)
                 {
@@ -99,7 +99,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 33 && teamColor == "Yellow")
+            else if (position > 33 && teamColor.ToLower() == "yellow")
             {
                 if (position < 56)
                 {
@@ -162,6 +162,20 @@ namespace LudoV2Api.Validations
 
             existsOnPosition.Position = knockedOutBasePosition;
             return existsOnPosition;
+        }
+
+        public static int NextTurn(int turnOrder, int numberOfPlayers)
+        {
+            if (turnOrder + 1 > numberOfPlayers - 1)
+            {
+                turnOrder = 0;
+                return turnOrder;
+            }
+            else
+            {
+                turnOrder++;
+                return turnOrder;
+            }
         }
     }
 

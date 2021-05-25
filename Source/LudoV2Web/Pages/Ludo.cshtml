@@ -9,9 +9,10 @@
 <form>
     <input id="gameIdValue" asp-for="@Model.MovePawn.GameId" type="hidden" value="@Model.Game.Id" />
     <input id="pawnColorValue" asp-for="@Model.MovePawn.TeamColor" type="hidden" value="0" />
-    <input id="pawnPositionValue" asp-for="@Model.MovePawn.Position" type="hidden" value="0" />
+    <input id="pawnPositionValue" asp-for="@Model.MovePawn.Position" type="hidden" value="-1" />
     <input id="pawnIdValue" asp-for="@Model.MovePawn.PawnId" type="hidden" value="0" />
     <input id="diceValue" asp-for="@Model.MovePawn.Dice" type="hidden" value="0" />
+    <input id="isBase" type="hidden" value="0" />
     <input id="pawnBasePosition" type="hidden" value="0" />
 
     <button id="movePawnButton" type="button" disabled onclick="PostLudoData()">Move Pawn</button>
@@ -48,11 +49,11 @@
             {
                 if (redPawns[k].Position < 4)
                 {
-                    <div id="@redPawns[k].Id" class="red basePawn square pawn@(k + 1)"></div>
+                    <div id="@(redPawns[k].Id)_b" class="red basePawn pawn@(k + 1) 0 square"></div>
                 }
                 else
                 {
-                    <div id="@redPawns[k].Id" class="red basePawn square pawn@(k + 1)" style="display: none;"></div>
+                    <div id="@(redPawns[k].Id)_b" class="red basePawn pawn@(k + 1) 0 square" style="display: none;"></div>
 
                 }
             }
@@ -68,11 +69,11 @@
             {
                 if (bluePawns[k].Position < 4)
                 {
-                    <div id="@bluePawns[k].Id" class="blue basePawn square pawn@(k + 1)"></div>
+                    <div id="@(bluePawns[k].Id)_b" class="blue basePawn pawn@(k + 1) 1 square"></div>
                 }
                 else
                 {
-                    <div id="@bluePawns[k].Id" class="blue basePawn square pawn@(k + 1)" style="display: none;"></div>
+                    <div id="@(bluePawns[k].Id)_b" class="blue basePawn pawn@(k + 1) 1 square" style="display: none;"></div>
 
                 }
             }
@@ -84,16 +85,20 @@
             @{
                 var yellowPawns = Model.Pawns.FindAll(x => x.Color.ToLower() == "yellow");
             }
-            @for (int k = 0; k < 4; k++)
+              
+            @if (yellowPawns.Count > 0)
             {
-                if (yellowPawns[k].Position < 4)
+                for (int k = 0; k < 4; k++)
                 {
-                    <div id="@yellowPawns[k].Id" class="yellow basePawn square pawn@(k + 1)"></div>
-                }
-                else
-                {
-                    <div id="@yellowPawns[k].Id" class="yellow basePawn square pawn@(k + 1)" style="display: none;"></div>
+                    if (yellowPawns[k].Position < 4)
+                    {
+                        <div id="@(yellowPawns[k].Id)_b" class="yellow basePawn pawn@(k + 1) 2 square"></div>
+                    }
+                    else
+                    {
+                        <div id="@(yellowPawns[k].Id)_b" class="yellow basePawn pawn@(k + 1) 2 square" style="display: none;"></div>
 
+                    }
                 }
             }
         </div>
@@ -104,16 +109,19 @@
             @{
                 var greenPawns = Model.Pawns.FindAll(x => x.Color.ToLower() == "green");
             }
-            @for (int k = 0; k < 4; k++)
+            @if (greenPawns.Count > 0)
             {
-                if (greenPawns[k].Position < 4)
+                for (int k = 0; k < 4; k++)
                 {
-                    <div id="@greenPawns[k].Id" class="green basePawn pawn@(k + 1)"></div>
-                }
-                else
-                {
-                    <div id="@greenPawns[k].Id" class="green basePawn square pawn@(k + 1)" style="display: none;"></div>
+                    if (greenPawns[k].Position < 4)
+                    {
+                        <div id="@(greenPawns[k].Id)_b" class="green basePawn pawn@(k + 1) 3 square"></div>
+                    }
+                    else
+                    {
+                        <div id="@(greenPawns[k].Id)_b" class="green basePawn pawn@(k + 1) 3 square" style="display: none;"></div>
 
+                    }
                 }
             }
         </div>
@@ -193,26 +201,6 @@
     <div id="45" class="cells red" style="top: 46.66%;left:26.64%;"></div>
     <div id="44" class="cells red" style="top: 46.66%;left:19.98%;"></div>
     <div id="43" class="cells" style="top: 46.66%;left:13.32%;"></div>
-</div>
-
-
-<div class="container">
-
-    <div class="row">
-        <div class="col-2">Message</div>
-        <div class="col-4"><input type="text" id="messageInput" /></div>
-    </div>
-    <div class="row">&nbsp;</div>
-    <div class="row">
-        <div class="col-6">
-            <input type="button" id="sendButton" value="Send Message" />
-        </div>
-    </div>
-</div>
-<div class="row">
-    <div class="col-6">
-        <ul id="messagesList"></ul>
-    </div>
 </div>
 
 

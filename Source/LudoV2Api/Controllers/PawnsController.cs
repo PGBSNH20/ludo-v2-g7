@@ -126,7 +126,7 @@ namespace LudoV2Api.Controllers
 
             Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
 
-            if (existsOnPosition != null)
+            if (existsOnPosition != null && existsOnPosition.Id != pawn.Id && existsOnPosition.Position != 60)
             {
                 Pawn knockedOutPosition = ControllerMethods.KockOutPawn(pawnRequest.TeamColor, existsOnPosition, newPosition);
 
@@ -151,16 +151,7 @@ namespace LudoV2Api.Controllers
 
             if (_sixesRolled >= 2 || _sixesRolled == 0)
             {
-                int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
-
-                if (index + 1 > game.NumberOfPlayers - 1)
-                {
-                    index = 0;
-                }
-                else
-                {
-                    index++;
-                }
+                int index = ControllerMethods.NextTurn(_turnOrder.IndexOf(pawnRequest.TeamColor), game.NumberOfPlayers);
 
                 game.CurrentTurn = _turnOrder[index];
                 _sixesRolled = 0;
@@ -179,7 +170,7 @@ namespace LudoV2Api.Controllers
             movedPawns.KnockedPawnPosition = -1;
 
 
-            if (existsOnPosition != null)
+            if (existsOnPosition != null && existsOnPosition.Position != 60)
             {
                 movedPawns.KnockedPawnPosition = existsOnPosition.Position;
             }
@@ -188,7 +179,7 @@ namespace LudoV2Api.Controllers
         }
 
         [HttpPut("movefrombase")]
-        public async Task<IActionResult> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
+        public async Task<ActionResult<IEnumerable<MovePawnReturnRequest>>> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
         {
 
             Dictionary<string, int> pawnStartPosition = new()
@@ -198,6 +189,8 @@ namespace LudoV2Api.Controllers
                 { "green", 24 },
                 { "yellow", 34 }
             };
+
+            MovePawnReturnRequest returnData = new();
 
             var canPlay = ControllerMethods.ValidatingCurrentTurn(_context, pawnRequest.GameId, pawnRequest.TeamColor);
 
@@ -220,21 +213,16 @@ namespace LudoV2Api.Controllers
                 pawnToMove.Position = pawnStartPosition[pawnToMove.Color.ToLower()];
                 var game = await _context.Games.FindAsync(pawnRequest.GameId);
 
-                int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
-
-                if (index + 1 > 3)
-                {
-                    index = 0;
-                }
-                else
-                {
-                    index++;
-                }
+                int index = ControllerMethods.NextTurn(_turnOrder.IndexOf(pawnRequest.TeamColor), game.NumberOfPlayers);
 
                 game.CurrentTurn = _turnOrder[index];
 
                 await _context.SaveChangesAsync();
-                return NoContent();
+
+                returnData.CurrentTurn = game.CurrentTurn;
+                returnData.PawnPosition = pawnToMove.Position;
+
+                return Ok(returnData);
             }
             else if (pawnRequest.Dice == 6)
             {
@@ -244,16 +232,7 @@ namespace LudoV2Api.Controllers
 
                 if (_sixesRolled < 2)
                 {
-                    int index = _turnOrder.IndexOf(pawnRequest.TeamColor);
-
-                    if (index + 1 > game.NumberOfPlayers - 1)
-                    {
-                        index = 0;
-                    }
-                    else
-                    {
-                        index++;
-                    }
+                    int index = ControllerMethods.NextTurn(_turnOrder.IndexOf(pawnRequest.TeamColor), game.NumberOfPlayers);
 
                     game.CurrentTurn = _turnOrder[index];
                     _sixesRolled = 0;
@@ -264,11 +243,27 @@ namespace LudoV2Api.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                return NoContent();
+
+                returnData.CurrentTurn = game.CurrentTurn;
+                returnData.PawnPosition = pawnToMove.Position;
+
+                return Ok(returnData);
             }
             else
             {
-                return BadRequest("You can't move any pawns from base");
+                var game = await _context.Games.FindAsync(pawnRequest.GameId);
+
+                int index = ControllerMethods.NextTurn(_turnOrder.IndexOf(pawnRequest.TeamColor), game.NumberOfPlayers);
+
+                game.CurrentTurn = _turnOrder[index];
+
+                await _context.SaveChangesAsync();
+
+                returnData.CurrentTurn = game.CurrentTurn;
+
+                return Ok(returnData);
+
+                //return BadRequest("You can't move any pawns from base");
             }
         }
 

@@ -8,6 +8,9 @@ function PawnMoveHelper(basePawn, baseSquare) {
 }
 
 function MovePawn(squareID, pawnToMove, baseCircleClasses) {
+    if (squareID == 0) {
+        return;
+    }
     const square = document.getElementById(squareID);
     const pawn = document.getElementsByClassName(pawnToMove);
     const baseCircle = document.getElementsByClassName(baseCircleClasses + " basePawn");
@@ -66,8 +69,12 @@ function GetPawnValues(event) {
 
     document.getElementById("pawnColorValue").value = event.className.split(' ')[0];
     document.getElementById("pawnPositionValue").value = event.className.split(' ')[3];
-    document.getElementById("pawnIdValue").value = event.id;
+    document.getElementById("pawnIdValue").value = event.id.split("_")[0];
     document.getElementById("pawnBasePosition").value = "square" + basePosition;
+
+    if (event.classList.contains("basePawn")) {
+        document.getElementById("isBase").value = 1;
+    }
 
     RemoveDisableFromButton();
 }
@@ -88,7 +95,7 @@ function RemoveDisableFromButton() {
     const dice = document.getElementById("diceValue").value;
     const submitButton = document.getElementById("movePawnButton");
 
-    if (dice != 0 && pawnColor != 0 && pawnPosition != 0) {
+    if (dice != 0 && pawnColor != 0 && pawnPosition != -1) {
         submitButton.disabled = false;
     }
 }
@@ -101,21 +108,35 @@ async function PostLudoData() {
     const gameId = document.getElementById("gameIdValue").value
     const pawn = document.getElementById(pawnId);
     const baseCircleClasses = teamColor + " " + "pawn" + pawn.className.split(" ")[2].slice(-1);
+    const isBasePawn = document.getElementById("isBase").value;
 
-    const putData = { Dice: diceRoll, PawnId: pawnId, Position: position, TeamColor: teamColor, GameId: gameId}
-    await fetch("https://localhost:5001/api/Pawns/move", {
-        method: "PUT",
-        headers: {
-            "content-Type": "application/json"
-        },
-        body: JSON.stringify(putData)
-    }).then(response => response.json().then(data => {
-        if (data.knockedPawnPosition < 0) {
-            //MovePawn(data[0], pawn.className.split(" ")[2], baseCircleClasses)
-            signalrMove(data.pawnPosition, pawn.className.split(" ")[2], baseCircleClasses, data.currentTurn);
-            return;
-        }
-    }));
+    const putData = { Dice: diceRoll, PawnId: pawnId, Position: position, TeamColor: teamColor, GameId: gameId }
+
+    if (isBasePawn == 0) {
+        await fetch("https://localhost:5001/api/Pawns/move", {
+            method: "PUT",
+            headers: {
+                "content-Type": "application/json"
+            },
+            body: JSON.stringify(putData)
+        }).then(response => response.json().then(data => {
+            if (data.knockedPawnPosition < 0) {
+                signalrMove(data.pawnPosition, pawn.className.split(" ")[2], baseCircleClasses, data.currentTurn);
+                return;
+            }
+        }));
+    } else if (isBasePawn == 1) {
+        await fetch("https://localhost:5001/api/Pawns/movefrombase", {
+            method: "PUT",
+            headers: {
+                "content-Type": "application/json"
+            },
+            body: JSON.stringify(putData)
+        }).then(response => response.json().then(data => {
+                signalrMove(data.pawnPosition, pawn.className.split(" ")[2], baseCircleClasses, data.currentTurn);
+                return;
+        }));
+    }
 }
 
 function ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn) {
@@ -125,6 +146,7 @@ function ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn) {
     document.getElementById("pawnBasePosition").value = 0;
     document.getElementById("diceRoll").textContent = "Dice roll: ";
     document.getElementById("diceValue").value = 0;
+    document.getElementById("isBase").value = 0;
 
     document.getElementById("diceButton").disabled = false;
     document.getElementById("movePawnButton").disabled = true;
@@ -166,9 +188,6 @@ connection.start().then(function () {
 function signalrMove(positionValue, pawnToMoveValue, pawnBaseValue, currentTurn) {
 
     const title = document.getElementById("title").textContent;
-    //connection.invoke("AddToGroup", title).catch(function (err) {
-    //    return console.error(err.toString());
-    //});
 
     connection.invoke("MovePawns", title, positionValue, pawnToMoveValue, pawnBaseValue, currentTurn).catch(function (err) {
         return console.error(err.toString());

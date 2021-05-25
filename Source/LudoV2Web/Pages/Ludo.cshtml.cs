@@ -38,37 +38,37 @@ namespace LudoV2Web.Pages
             Pawns = pawnList.Result;
         }
 
-        public async Task<IActionResult> OnPost()
-        {
-            //if (ModelState.IsValid == false)
-            //{
-            //    return Page();
-            //}
+        //public async Task<IActionResult> OnPost()
+        //{
+        //    //if (ModelState.IsValid == false)
+        //    //{
+        //    //    return Page();
+        //    //}
 
-            var client = new RestClient("https://localhost:5001/api/");
-            if (MovePawn.Position > 4)
-            {
-                var request = new RestRequest("Pawns/move", Method.PUT);
+        //    var client = new RestClient("https://localhost:5001/api/");
+        //    if (MovePawn.Position > 4)
+        //    {
+        //        var request = new RestRequest("Pawns/move", Method.PUT);
 
-                request.AddJsonBody(MovePawn);
+        //        request.AddJsonBody(MovePawn);
 
-                var response = await client.ExecuteAsync(request);
+        //        var response = await client.ExecuteAsync(request);
 
-                var responseContent = response.Content;
-            }
-            else
-            {
-                var request = new RestRequest("Pawns/movefrombase", Method.PUT);
+        //        var responseContent = response.Content;
+        //    }
+        //    else
+        //    {
+        //        var request = new RestRequest("Pawns/movefrombase", Method.PUT);
 
-                request.AddJsonBody(MovePawn);
+        //        request.AddJsonBody(MovePawn);
 
-                var response = await client.ExecuteAsync(request);
+        //        var response = await client.ExecuteAsync(request);
 
-                var responseContent = response.Content;
-            }
+        //        var responseContent = response.Content;
+        //    }
 
-            return RedirectToPage("/Ludo", new { gameId = MovePawn.GameId });
-        }
+        //    return RedirectToPage("/Ludo", new { gameId = MovePawn.GameId });
+        //}
 
         public async Task<List<Pawn>> FindPawns(int gameId)
         {
