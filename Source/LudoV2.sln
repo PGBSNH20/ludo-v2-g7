@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Api", "LudoV2Api\Ludo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Test", "LudoV2Test\LudoV2Test.csproj", "{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoV2Web", "LudoV2Web\LudoV2Web.csproj", "{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Web", "LudoV2Web\LudoV2Web.csproj", "{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

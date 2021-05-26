@@ -178,6 +178,7 @@ namespace LudoV2Api.Controllers
             return Ok(movedPawns);
         }
 
+        // PUT: api/Pawns/moveformbase
         [HttpPut("movefrombase")]
         public async Task<ActionResult<MovePawnReturnRequest>> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
         {

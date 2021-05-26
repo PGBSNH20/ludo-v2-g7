@@ -7,6 +7,7 @@ using LudoV2Api.Models.ApiRequests;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
@@ -36,9 +37,11 @@ namespace LudoV2Web.Pages
 
             request.AddParameter("application/Json", game, ParameterType.RequestBody);
             request.RequestFormat = DataFormat.Json;
-            await client.ExecuteAsync(request);
+            var response = await client.ExecuteAsync(request);
 
-            return RedirectToPage("/Ludo", new { id = newGame.GameName });
+            var gameDeserialized = JsonConvert.DeserializeObject<Game>(response.Content);
+
+            return RedirectToPage("/Ludo", new { title = gameDeserialized.GameName, gameId = gameDeserialized.Id});
         }
     }
 }
