@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LudoV2Api.Models;
 using LudoV2Api.Models.ApiRequests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -15,11 +16,13 @@ namespace LudoV2Web.Pages
 {
     public class NewGameModel : PageModel
     {
+        [ViewData]
+        public string Username { get; set; }
         [BindProperty]
         public NewGameRequest NewGame { get; set; }
         public void OnGet()
         {
-
+            Username = HttpContext.Session.GetString("username");
         }
 
         public async Task<IActionResult> OnPost(NewGameRequest newGame)

@@ -1,4 +1,5 @@
 ﻿using LudoV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,8 @@ namespace LudoV2Web.Pages
 {
     public class IndexModel : PageModel
     {
+        [ViewData]
+        public string Username { get; set; }
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(ILogger<IndexModel> logger)
@@ -20,6 +23,7 @@ namespace LudoV2Web.Pages
         }
         public void OnGet()
         {
+            Username = HttpContext.Session.GetString("username");
         }
     }
 }

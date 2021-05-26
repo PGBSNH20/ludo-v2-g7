@@ -177,6 +177,27 @@ namespace LudoV2Api.Validations
                 return turnOrder;
             }
         }
+
+        public static int PawnExistsOnPosition(Pawn existsOnPosition, string pawnRequestTeamColor, int pawnId, int newPosition)
+        {
+            if (existsOnPosition != null && existsOnPosition.Id != pawnId && existsOnPosition.Position != 60)
+            {
+                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(pawnRequestTeamColor, existsOnPosition, newPosition);
+
+               if (knockedOutPosition.Position >= 0)
+               {
+                    return knockedOutPosition.Position;
+               }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                return -2;
+            }
+        }
     }
 
 }

@@ -20,6 +20,10 @@ function MovePawn(squareID, pawnToMove, baseCircleClasses) {
     let squareBot = square.style.bottom;
     let squareLeft = square.style.left;
 
+    const pawnClasses = pawn[0].className.split(" ");
+
+    pawn[0].classList.remove(pawnClasses[3]);
+
     if (square.id == 60) {
         pawn[0].style.display = "none";
         pawn[0].style.removeProperty("z-index");

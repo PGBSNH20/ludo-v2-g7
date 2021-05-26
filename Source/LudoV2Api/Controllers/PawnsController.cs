@@ -124,21 +124,21 @@ namespace LudoV2Api.Controllers
                 newPosition = ControllerMethods.PawnSafeZone(newPosition, pawnRequest.TeamColor);
             }
 
+            #region "Knockuot the pawn that exists on the position"
+
             Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == newPosition).FirstOrDefault();
 
-            if (existsOnPosition != null && existsOnPosition.Id != pawn.Id && existsOnPosition.Position != 60)
+            int pawnExistsOnPosition = ControllerMethods.PawnExistsOnPosition(existsOnPosition, pawnRequest.TeamColor, pawn.Id, newPosition);
+            
+            if (pawnExistsOnPosition == -1)
             {
-                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(pawnRequest.TeamColor, existsOnPosition, newPosition);
-
-                if (knockedOutPosition.Position == -2)
-                {
-                    return BadRequest("You can't have two pawns at the same position");
-                }
-                else if (knockedOutPosition.Position >= 0)
-                {
-                    existsOnPosition.Position = knockedOutPosition.Position;
-                }
+                return BadRequest("You can't have two pawns at the same position");
             }
+            else if (pawnExistsOnPosition > 0)
+            {
+                existsOnPosition.Position = pawnExistsOnPosition;
+            }
+            #endregion
 
             pawn.Position = newPosition;
 
@@ -180,7 +180,7 @@ namespace LudoV2Api.Controllers
 
         // PUT: api/Pawns/moveformbase
         [HttpPut("movefrombase")]
-        public async Task<ActionResult<MovePawnReturnRequest>> PutPawnFromBase(/*int gameId, int pawnId, int dice, string teamColor */MovePawnRequest pawnRequest)
+        public async Task<ActionResult<MovePawnReturnRequest>> PutPawnFromBase(MovePawnRequest pawnRequest)
         {
 
             Dictionary<string, int> pawnStartPosition = new()
@@ -218,6 +218,23 @@ namespace LudoV2Api.Controllers
 
                 game.CurrentTurn = _turnOrder[index];
 
+                #region "Knockuot the pawn that exists on the position"
+
+                Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == pawnToMove.Position).FirstOrDefault();
+
+                int pawnExistsOnPosition = ControllerMethods.PawnExistsOnPosition(existsOnPosition, pawnRequest.TeamColor, pawnToMove.Id, pawnToMove.Position);
+
+
+                if (pawnExistsOnPosition == -1)
+                {
+                    return BadRequest("You can't have two pawns at the same position");
+                }
+                else if (pawnExistsOnPosition > 0)
+                {
+                    existsOnPosition.Position = pawnExistsOnPosition;
+                }
+                #endregion
+
                 await _context.SaveChangesAsync();
 
                 returnData.CurrentTurn = game.CurrentTurn;
@@ -230,6 +247,22 @@ namespace LudoV2Api.Controllers
                 _sixesRolled++;
                 pawnToMove.Position = pawnStartPosition[pawnToMove.Color.ToLower()] + 5;
                 var game = await _context.Games.FindAsync(pawnRequest.GameId);
+
+                #region "Knockuot the pawn that exists on the position"
+                Pawn existsOnPosition = _context.Pawns.Where(x => x.Position == pawnToMove.Position).FirstOrDefault();
+
+                int pawnExistsOnPosition = ControllerMethods.PawnExistsOnPosition(existsOnPosition, pawnRequest.TeamColor, pawnToMove.Id, pawnToMove.Position);
+
+
+                if (pawnExistsOnPosition == -1)
+                {
+                    return BadRequest("You can't have two pawns at the same position");
+                }
+                else if (pawnExistsOnPosition > 0)
+                {
+                    existsOnPosition.Position = pawnExistsOnPosition;
+                }
+                #endregion
 
                 if (_sixesRolled < 2)
                 {

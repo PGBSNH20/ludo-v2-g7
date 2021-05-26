@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LudoV2Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RestSharp;
@@ -11,6 +12,8 @@ namespace LudoV2Web.Pages
 {
     public class ExistingGamesModel : PageModel
     {
+        [ViewData]
+        public string Username { get; set; }
         public List<Game> Games { get; set; }
         [BindProperty]
         public Game Game { get; set; }
@@ -23,11 +26,14 @@ namespace LudoV2Web.Pages
             var response = client.Get<List<Game>>(request);
 
             Games = response.Data;
+            Username = HttpContext.Session.GetString("username");
         }
 
         public IActionResult OnPost()
         {
-            return RedirectToPage("Ludo", new { title = Game.GameName, gameId = Game.Id});
+            HttpContext.Session.SetInt32("gameId", Game.Id);
+
+            return RedirectToPage("Ludo", new { title = Game.GameName });
         }
     }
 }

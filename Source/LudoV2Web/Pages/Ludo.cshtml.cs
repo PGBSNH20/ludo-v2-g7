@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using LudoV2Api.Models;
 using LudoV2Api.Models.ApiRequests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
@@ -13,6 +15,8 @@ namespace LudoV2Web.Pages
 {
     public class LudoModel : PageModel
     {
+        [ViewData]
+        public string Username { get; set; }
         public string Title { get; set; }
         public int Dice { get; set; }
         [BindProperty]
@@ -24,11 +28,27 @@ namespace LudoV2Web.Pages
         public List<Player> Players { get; set; }
         [BindProperty]
         public MovePawnRequest MovePawn { get; set; }
-        public void OnGet(string title, int gameId)
+        public void OnGet(string title)
         {
+            var gameId = HttpContext.Session.GetInt32("gameId");
+
             Title = title;
-            var client = new RestClient("https://localhost:5001/api/");
-            var request = new RestRequest("Games/" + gameId, DataFormat.Json);
+            Username = HttpContext.Session.GetString("username");
+
+            RestClient client = new RestClient("https://localhost:5001/api/");
+            RestRequest request;
+
+            if (gameId == null)
+            {
+                request = new RestRequest("Games", DataFormat.Json);
+                var responseGameId = client.Get<List<Game>>(request);
+
+                var findGame = responseGameId.Data.Find(x => x.GameName.ToLower() == title.ToLower());
+
+                gameId = findGame.Id;
+            }
+
+            request = new RestRequest("Games/" + gameId, DataFormat.Json);
             var response = client.Get<Game>(request);
 
             Game = response.Data;
@@ -37,38 +57,6 @@ namespace LudoV2Web.Pages
             var pawnList = FindPawns(Game.Id);
             Pawns = pawnList.Result;
         }
-
-        //public async Task<IActionResult> OnPost()
-        //{
-        //    //if (ModelState.IsValid == false)
-        //    //{
-        //    //    return Page();
-        //    //}
-
-        //    var client = new RestClient("https://localhost:5001/api/");
-        //    if (MovePawn.Position > 4)
-        //    {
-        //        var request = new RestRequest("Pawns/move", Method.PUT);
-
-        //        request.AddJsonBody(MovePawn);
-
-        //        var response = await client.ExecuteAsync(request);
-
-        //        var responseContent = response.Content;
-        //    }
-        //    else
-        //    {
-        //        var request = new RestRequest("Pawns/movefrombase", Method.PUT);
-
-        //        request.AddJsonBody(MovePawn);
-
-        //        var response = await client.ExecuteAsync(request);
-
-        //        var responseContent = response.Content;
-        //    }
-
-        //    return RedirectToPage("/Ludo", new { gameId = MovePawn.GameId });
-        //}
 
         public async Task<List<Pawn>> FindPawns(int gameId)
         {

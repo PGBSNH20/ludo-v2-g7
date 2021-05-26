@@ -5,7 +5,10 @@ using System.Threading.Tasks;
 using LudoV2Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 using RestSharp;
+using LudoV2Web.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace LudoV2Web.Pages
 {
@@ -16,21 +19,48 @@ namespace LudoV2Web.Pages
 
         }
 
-        public async void OnPost()
+        public async Task<ActionResult> OnPost()
         {
             if (Request.Form["login"] == 0)
             {
-                Player newPlayer = new() { PlayerName = Request.Form["username"] };
+                Player player = new() { PlayerName = Request.Form["username"] };
 
                 var client = new RestClient("https://localhost:5001/api/");
 
                 var request = new RestRequest("Players", DataFormat.Json);
-                request.AddJsonBody(newPlayer);
+                request.AddJsonBody(player);
 
-                await client.PostAsync<Player>(request);
+                var response = await client.PostAsync<Player>(request);
+
+                HttpContext.Session.SetString("username", response.PlayerName);
+                HttpContext.Session.SetInt32("usernameId", response.Id);
+
+                return RedirectToPage("index");
             }
             else
             {
+                var client = new RestClient("https://localhost:5001/api/");
+
+                var request = new RestRequest("Players", DataFormat.Json);
+
+                var response = await client.GetAsync<List<Player>>(request);
+
+                var user = response.Find( x => x.PlayerName == Request.Form["username"]);
+
+                if (user != null)
+                {
+                    var options = CustomCookiesOptions.CustomCookieOptions();
+
+                    HttpContext.Session.SetString("username", user.PlayerName);
+                    HttpContext.Session.SetInt32("usernameId", user.Id);
+
+
+                    return RedirectToPage("index");
+                }
+                else
+                {
+                    return Page();
+                }
 
             }
         }
