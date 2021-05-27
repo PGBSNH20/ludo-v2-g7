@@ -114,7 +114,7 @@ async function PostLudoData() {
     const baseCircleClasses = teamColor + " " + "pawn" + pawn.className.split(" ")[2].slice(-1);
     const isBasePawn = document.getElementById("isBase").value;
 
-    const putData = { Dice: diceRoll, PawnId: pawnId, Position: position, TeamColor: teamColor, GameId: gameId }
+    const putData = { Dice: diceRoll, PawnId: pawnId, Position: position, TeamColor: teamColor, GameId: gameId };
 
     if (isBasePawn == 0) {
         await fetch("https://localhost:5001/api/Pawns/move", {
@@ -152,10 +152,18 @@ function ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn) {
     document.getElementById("diceValue").value = 0;
     document.getElementById("isBase").value = 0;
 
-    document.getElementById("diceButton").disabled = false;
-    document.getElementById("movePawnButton").disabled = true;
+    document.getElementById("currentTurn").innerHTML = "Current turn " + currentTurn;
+    document.getElementById("currentTurnValue").value = currentTurn;
 
-    document.getElementById("cuttentTurn").innerHTML = "Current turn " + currentTurn;
+    const userColor = document.getElementById("userColor").value;
+
+    if (userColor != currentTurn) {
+        document.getElementById("diceButton").disabled = true;
+        document.getElementById("movePawnButton").disabled = true;
+    } else {
+        document.getElementById("diceButton").disabled = false;
+        document.getElementById("movePawnButton").disabled = true;
+    }
 
 }
 
@@ -197,3 +205,34 @@ function signalrMove(positionValue, pawnToMoveValue, pawnBaseValue, currentTurn)
         return console.error(err.toString());
     });
 };
+
+document.getElementById("submitColor").addEventListener("click", async function (event) {
+    event.preventDefault();
+
+    const gameId = document.getElementById("gameIdValue").value;
+    const playerName = document.getElementById("userName").innerHTML;
+    const teamColor = document.getElementById("teamColorSelect").value;
+
+    const postData = { GameId: gameId, PlayerName: playerName, Color: teamColor };
+
+    await fetch("https://localhost:5001/api/Players/game/", {
+        method: "POST",
+        headers: {
+            "content-Type": "application/json"
+        },
+        body: JSON.stringify(postData)
+    }).then(response => {
+        if (response.status >= 400) {
+            alert(respons.statusText);
+        } else {
+            document.getElementById("playerSelectColors").style.display = "none";
+
+            const currentTurn = document.getElementById("currentTurnValue").value;
+
+            if (teamColor == currentTurn) {
+                document.getElementById("diceButton").disabled = false;
+                document.getElementById("movePawnButton").disabled = true;
+            }
+        }
+    });
+});

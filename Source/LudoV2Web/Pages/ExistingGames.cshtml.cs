@@ -19,9 +19,9 @@ namespace LudoV2Web.Pages
         public Game Game { get; set; }
         public void OnGet()
         {
-            var client = new RestClient("https://localhost:5001/api/");
+            RestClient client = new("https://localhost:5001/api/");
 
-            var request = new RestRequest("Games", DataFormat.Json);
+            RestRequest request = new("Games", DataFormat.Json);
 
             var response = client.Get<List<Game>>(request);
 

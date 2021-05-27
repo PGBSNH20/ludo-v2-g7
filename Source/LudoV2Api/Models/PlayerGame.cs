@@ -8,5 +8,6 @@ namespace LudoV2Api.Models
         public ICollection<Player> Player { get; set; }
         public int GameId { get; set; }
         public ICollection<Game> Game { get; set; }
+        public string Color { get; set; }
     }
 }

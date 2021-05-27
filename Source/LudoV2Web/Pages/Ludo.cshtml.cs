@@ -18,24 +18,23 @@ namespace LudoV2Web.Pages
         [ViewData]
         public string Username { get; set; }
         public string Title { get; set; }
+        public int UserId { get; set; }
         public int Dice { get; set; }
-        [BindProperty]
         public Game Game { get; set; }
-        [BindProperty]
         public Pawn Pawn { get; set; }
-        [BindProperty]
         public List<Pawn> Pawns { get; set; }
-        public List<Player> Players { get; set; }
-        [BindProperty]
+        public List<PlayerGame> Players { get; set; }
         public MovePawnRequest MovePawn { get; set; }
+        public List<string> TeamColors { get;} = new() { "Red", "Blue", "Green", "Yellow" };
         public void OnGet(string title)
         {
             var gameId = HttpContext.Session.GetInt32("gameId");
 
             Title = title;
             Username = HttpContext.Session.GetString("username");
+            UserId = Convert.ToInt32(HttpContext.Session.GetInt32("userId"));
 
-            RestClient client = new RestClient("https://localhost:5001/api/");
+            RestClient client = new("https://localhost:5001/api/");
             RestRequest request;
 
             if (gameId == null)
@@ -56,12 +55,17 @@ namespace LudoV2Web.Pages
 
             var pawnList = FindPawns(Game.Id);
             Pawns = pawnList.Result;
+
+            request = new RestRequest("Players/game/" + gameId, DataFormat.Json);
+            var playerGameResponse = client.Get<List<PlayerGame>>(request);
+
+            Players = playerGameResponse.Data;
         }
 
         public async Task<List<Pawn>> FindPawns(int gameId)
         {
-            var client = new RestClient("https://localhost:5001/api/");
-            var request = new RestRequest("Pawns/game/" + gameId, DataFormat.Json);
+            RestClient client = new("https://localhost:5001/api/");
+            RestRequest request = new("Pawns/game/" + gameId, DataFormat.Json);
             var response = await client.GetAsync<List<Pawn>>(request);
 
             return response;
