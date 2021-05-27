@@ -2,13 +2,14 @@
 @model LudoV2Web.Pages.AccountModel
 @{
 }
+<link rel="stylesheet" href="~/css/styling.css" />
 
 <h3>Create Account</h3>
 <form method="post">
     <input type="hidden" name="login" value="0" />
     <label for="username">Username: </label>
     <input type="text" name="username" required placeholder="Username" />
-    <button type="submit">Submit</button>
+    <button class="submit-button" type="submit">Submit</button>
 </form>
 
 <h3>Login</h3>
@@ -16,5 +17,5 @@
     <input type="hidden" name="login" value="1" />
     <label for="username">Username: </label>
     <input type="text" name="username" required placeholder="Username" />
-    <button type="submit">Submit</button>
+    <button class="submit-button" type="submit">Submit</button>
 </form>

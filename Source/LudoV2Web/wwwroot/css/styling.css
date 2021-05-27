@@ -1,0 +1,81 @@
+﻿.button {
+    background-color: rgb(24, 26, 27);
+    color: white;
+    border-color: rgb(5, 198, 127);
+    text-decoration-color: initial;
+    border: 2px solid #04AA6D;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 20px;
+    margin: 30px;
+    display: block;
+    align-content: center;
+}
+    .button:hover {
+        Background-color: #4062bf;
+        Color: black;
+    }
+/* Add a black background color to the top navigation */
+.nav-item {
+    background-color: #333;
+    overflow: hidden;
+    margin: 1px;
+}
+
+    /* Style the links inside the navigation bar */
+    .nav-item a {
+        float: left;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+        
+    }
+
+        /* Change the color of links on hover */
+        .nav-item a:hover {
+            background-color: #4062bf;
+            color: black;
+        }
+
+        /* Add a color to the active/current link */
+        .nav-item a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+.navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 {
+    background-color: blue;
+}
+
+.game-name {
+    font-size: 25px;
+    color: white;
+    margin: 5px;
+}
+.divider{
+    border: 5px yellow;
+}
+
+.submit-button {
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 10px 22px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 15px;
+    cursor: pointer;
+}
+.ludo-title {
+    font-size: 40px;
+}
+.header-background {
+    background-color: #262a2b !important;
+}
+        
