@@ -62,7 +62,9 @@ I media queryn nedanför så har vi gjort så att spelplanen är en 1:1 aspect r
         float:left;
     }
 }
-
+```
+## Style för enheter med 600px bredd och uppåt
+```
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
     .game {
