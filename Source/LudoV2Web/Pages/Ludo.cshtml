@@ -5,7 +5,7 @@
     var disable = "";
     var dNone = "";
 
-    if (playerIsInTheGame == null || playerIsInTheGame.Color != Model.Game.CurrentTurn)
+    if (playerIsInTheGame == null || playerIsInTheGame.Color.ToLower() != Model.Game.CurrentTurn.ToLower())
     {
         disable = "disabled";
     }
