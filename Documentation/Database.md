@@ -2,10 +2,10 @@
 
 
 ## Games
-Innehåller information om spelet (??)
+Innehåller information om spelet
 
 ## Players
-Innehåller information om players (just nu används inte PlayerName)
+Innehåller information om players
 
 ## Pawns
 Innehåller data om pawns
@@ -15,4 +15,5 @@ Many-to-many, kopplar ihop Games tabellen och Players tabellen
 
   
 En bild på vår databasstruktur  
-![image](https://user-images.githubusercontent.com/70013388/119506416-2df4c400-bd6e-11eb-98d5-b41f959da6c1.png)
+![image](https://user-images.githubusercontent.com/70013388/119989154-24b26400-bfc7-11eb-8de0-f614f3fe9f5f.png)
+
