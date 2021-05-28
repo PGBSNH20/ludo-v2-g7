@@ -1,7 +1,9 @@
 # Responsivitet med CSS
 
 Det som redan är skapat utav ifrån Razor pages när man gör ett .net core webb applikation är redan  
-responsivt så det ända som behövdes göra var att göra spelplanen och speläserna responsiva
+responsivt så det ända som behövdes göra var att göra spelplanen och speläserna responsiva.  
+Spelplanen är dynamisk och håller en 1:1 aspect ratio när enhetens bredd är mindre än 600px bred.  
+Efter det så är den statisk och behåller sin 1:1 aspect ratio.
 
 ## Media queries för enheter med 320px bredd till 520px bredd
 ```
