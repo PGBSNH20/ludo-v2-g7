@@ -29,9 +29,13 @@ namespace LudoV2Web.Pages
 
             var response = client.Get<List<Game>>(request);
 
-
             Games = response.Data;
+        }
+        public IActionResult OnPost()
+        {
+            HttpContext.Session.SetInt32("gameId", Game.Id);
 
+            return RedirectToPage("Ludo", new { title = Game.GameName });
         }
     }
 }

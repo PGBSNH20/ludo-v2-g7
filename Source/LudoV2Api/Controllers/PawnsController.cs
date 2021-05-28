@@ -22,7 +22,7 @@ namespace LudoV2Api.Controllers
         private List<string> _turnOrder = new() { "red", "blue", "green", "yellow" };
         private int _sixesRolled = 0;
 
-        private Dictionary<string, int> _pawnBases = new()
+        private readonly Dictionary<string, int> _pawnBases = new()
         {
             { "red", 0 },
             { "blue", 1 },
@@ -144,6 +144,70 @@ namespace LudoV2Api.Controllers
 
             var game = await _context.Games.FindAsync(pawnRequest.GameId);
 
+            #region Check if player won and updates the games table
+            var pawns = await _context.Pawns.Where(x => x.Game.Id == pawnRequest.GameId && x.Color == pawnRequest.TeamColor && x.Position == 60).ToListAsync();
+
+            if (pawns.Count > 0)
+            {
+                if (pawns.Count == 4)
+                {
+                    if (string.IsNullOrWhiteSpace(game.FirstPlace))
+                    {
+                        game.FirstPlace = pawnRequest.TeamColor;
+                    }
+                    else if (string.IsNullOrWhiteSpace(game.SecondPlace))
+                    {
+                        game.SecondPlace = pawnRequest.TeamColor;
+
+                    }
+                    else if (string.IsNullOrWhiteSpace(game.ThirdPlace))
+                    {
+                        game.ThirdPlace = pawnRequest.TeamColor;
+
+                    }
+                    else if(string.IsNullOrWhiteSpace(game.FourthPlace))
+                    {
+                        game.FourthPlace = pawnRequest.TeamColor;
+
+                    }
+                    _context.SaveChanges();
+
+                    int index = ControllerMethods.NextTurn(_turnOrder.IndexOf(pawnRequest.TeamColor), game.NumberOfPlayers);
+
+                    MovePawnReturnRequest movedPawn = new();
+
+                    movedPawn.PawnPosition = pawn.Position;
+                    movedPawn.CurrentTurn = _turnOrder[index];
+                    movedPawn.KnockedPawnPosition = -1;
+                }
+            }
+            #endregion
+
+            #region Remove Color from turn index when the color has won
+
+            if (!string.IsNullOrWhiteSpace(game.FirstPlace))
+            {
+               var turn = _turnOrder.IndexOf(game.FirstPlace.ToLower());
+                _turnOrder.RemoveAt(turn);
+            }
+            else if (!string.IsNullOrWhiteSpace(game.SecondPlace))
+            {
+                var turn = _turnOrder.IndexOf(game.SecondPlace.ToLower());
+                _turnOrder.RemoveAt(turn);
+            }
+            else if (!string.IsNullOrWhiteSpace(game.ThirdPlace))
+            {
+                var turn = _turnOrder.IndexOf(game.ThirdPlace.ToLower());
+                _turnOrder.RemoveAt(turn);
+            }
+            else if (!string.IsNullOrWhiteSpace(game.FourthPlace))
+            {
+                var turn = _turnOrder.IndexOf(game.FourthPlace.ToLower());
+                _turnOrder.RemoveAt(turn);
+            }
+            #endregion
+
+            #region Dice rolled 6
             if (pawnRequest.Dice == 6)
             {
                 _sixesRolled++;
@@ -160,6 +224,7 @@ namespace LudoV2Api.Controllers
             {
                 game.CurrentTurn = pawnRequest.TeamColor;
             }
+            #endregion
 
             _context.SaveChanges();
 

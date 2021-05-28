@@ -1,4 +1,13 @@
-﻿
+﻿$(document).ready(function () {
+
+    $("div.pawn").click(function () {
+        GetPawnValues(event.target);
+    });
+    $("div.basePawn").click(function () {
+        GetPawnValues(event.target);
+    });
+});
+
 function PawnMoveHelper(basePawn, baseSquare) {
     basePawn.style.margin = "8px";
     basePawn.style.zIndex = 100;
@@ -167,34 +176,17 @@ function ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn) {
 
 }
 
-$(document).ready(function () {
-    $("div.pawn").click(function () {
-        GetPawnValues(event.target);
-    });
-    $("div.basePawn").click(function () {
-        GetPawnValues(event.target);
-    });
-});
-
-
-
 let connection = new signalR.HubConnectionBuilder().withUrl("/Ludo").build();
 
 
 connection.on("Move", function (positionValue, pawnToMoveValue, pawnBaseValue, currentTurn) {
-    
+
     let position = positionValue;
     let pawnToMove = pawnToMoveValue;
     let pawnBasePosition = pawnBaseValue;
 
     MovePawn(position, pawnToMove, pawnBasePosition);
     ResetPawnValuesAndDiceAndUpdateCurrentTurn(currentTurn);
-});
-
-connection.start().then(function () {
-    
-}).catch(function (err) {
-    return console.log(err.toString());
 });
 
 function signalrMove(positionValue, pawnToMoveValue, pawnBaseValue, currentTurn) {
@@ -236,3 +228,13 @@ document.getElementById("submitColor").addEventListener("click", async function 
         }
     });
 });
+
+window.addEventListener("load", (event) => {
+    const title = document.getElementById("title").textContent;
+
+    connection.start().then(function () {
+        connection.invoke("AddToGroup", title).catch((err) => { return console.error(err.toString()) });
+    }).catch(function (err) {
+        return console.log(err.toString());
+    });
+})

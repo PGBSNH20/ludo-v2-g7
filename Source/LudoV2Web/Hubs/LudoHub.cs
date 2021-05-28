@@ -11,8 +11,6 @@ namespace LudoV2Web.Hubs
 
         public async Task MovePawns(string groupName, int position, string pawnToMove, string pawnBase, string CurrentTurn)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
-
             await Clients.Group(groupName).SendAsync("Move", position, pawnToMove, pawnBase, CurrentTurn);
 
         }

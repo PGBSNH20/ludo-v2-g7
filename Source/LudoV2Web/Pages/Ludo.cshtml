@@ -10,7 +10,7 @@
         disable = "disabled";
     }
 
-    if (Model.Players.Count <= 4 || Model.UserId == 0 || playerIsInTheGame != null)
+    if (Model.Players.Count >= 4 || Model.UserId == 0 || playerIsInTheGame != null)
     {
         dNone = "d-none";
     }
