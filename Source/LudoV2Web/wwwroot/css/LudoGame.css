@@ -1,4 +1,9 @@
-﻿.game {
+﻿#title{
+    max-width: 80%;
+    overflow: hidden;
+}
+
+.game {
     display: flex;
     flex-wrap: wrap;
     margin: 20px auto;
@@ -191,10 +196,10 @@
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    ...
+    
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
 @media only screen and (min-width: 1200px) {
-    ...
+    
 }
