@@ -43,6 +43,14 @@ namespace LudoV2Api.Controllers
             return player;
         }
 
+        // GET: api/Players/game/5
+        [HttpGet("game/{id}")]
+        public async Task<ActionResult<IEnumerable<PlayerGame>>> GetPlayersInGame(int id)
+        {
+            return await _context.GamePlayers.Where(x => x.GameId == id).ToListAsync();
+        }
+
+
         // PUT: api/Players/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -84,6 +92,25 @@ namespace LudoV2Api.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetPlayer", new { id = player.Id }, player);
+        }
+
+        // POST: api/Players/game
+        [HttpPost("game")]
+        public async Task<ActionResult<PlayerGameRequest>> PostPlayerGame(PlayerGameRequest newPlayerGame)
+        {
+            Player player = _context.Players.Where(x => x.PlayerName.ToLower() == newPlayerGame.PlayerName.ToLower()).FirstOrDefault();
+
+            if (player.Id != 0)
+            {
+                PlayerGame playerGame = new() { GameId = newPlayerGame.GameId, Color = newPlayerGame.Color, PlayerId = player.Id };
+                _context.GamePlayers.Add(playerGame);
+                await _context.SaveChangesAsync();
+                return Created("api/Players/game", newPlayerGame);
+            }
+            else
+            {
+                return BadRequest("The player you are trying to add to the game dose not exist");
+            }
         }
 
         private bool PlayerExists(int id)

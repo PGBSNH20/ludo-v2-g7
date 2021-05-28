@@ -4,14 +4,16 @@ using LudoV2Api.Models.DbModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LudoV2Api.Migrations
 {
     [DbContext(typeof(LudoContext))]
-    partial class LudoContextModelSnapshot : ModelSnapshot
+    [Migration("20210527182552_removeThings")]
+    partial class removeThings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,11 +31,11 @@ namespace LudoV2Api.Migrations
                     b.Property<string>("CurrentTurn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("FirstPlace")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FourthPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("FourthPlace")
+                        .HasColumnType("int");
 
                     b.Property<string>("GameName")
                         .HasColumnType("nvarchar(max)");
@@ -44,11 +46,11 @@ namespace LudoV2Api.Migrations
                     b.Property<int>("NumberOfPlayers")
                         .HasColumnType("int");
 
-                    b.Property<string>("SecondPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("SecondPlace")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ThirdPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("ThirdPlace")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

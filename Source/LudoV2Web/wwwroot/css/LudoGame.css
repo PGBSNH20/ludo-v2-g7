@@ -111,3 +111,88 @@
     position: absolute;
 }
 
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .test{
+        position: relative;
+        width: 100%;
+    }
+    .game {
+        width: auto;
+        height: auto;
+    }
+    .game::before{
+        float: left;
+        padding-top: 100%;
+        content: "";
+    }
+    .game div{
+        float:left;
+    }
+    .pawn {
+        width: 15px;
+        height: 15px;
+        margin: 2px !important;
+    }
+}
+
+/* Small devices width  min-width 375px*/
+@media only screen and (min-width: 375px) {
+    .pawn {
+        width: 18px;
+        height: 18px;
+        margin: 3px !important;
+    }
+}
+
+/* Small devices width  min-width 425px*/
+@media only screen and (min-width: 425px) {
+    .pawn {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Small devices width  min-width 520px*/
+@media only screen and (min-width: 520px) {
+    .pawn {
+        width: 25px;
+        height: 25px;
+        margin: 4px !important;
+    }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .game {
+        width: 500px;
+        height: 500px;
+    }
+
+    .pawn {
+        margin: 4px !important;
+    }
+}
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .game {
+        width: 700px;
+        height: 700px;
+    }
+    .pawn {
+        height: 30px;
+        width: 30px;
+        margin: 8px !important;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    ...
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    ...
+}

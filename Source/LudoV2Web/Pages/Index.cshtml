@@ -12,6 +12,10 @@
 
 
 <div>
-    <a asp-page="newGame" class="button">New Game</a>
+    @if (!String.IsNullOrEmpty(Model.Username))
+    {
+        <a asp-page="newGame" class="button">New Game</a>
+        <a asp-page="UserGames" class="button">Your Games</a>
+    }
     <a asp-page="ExistingGames" class="button">Play in existing game</a>
 </div>

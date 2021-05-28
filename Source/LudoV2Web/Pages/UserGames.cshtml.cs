@@ -10,25 +10,27 @@ using RestSharp;
 
 namespace LudoV2Web.Pages
 {
-    public class ExistingGamesModel : PageModel
+    public class UserGamesModel : PageModel
     {
         [ViewData]
         public string Username { get; set; }
+        public int UserId { get; set; }
         public List<Game> Games { get; set; }
         [BindProperty]
         public Game Game { get; set; }
         public void OnGet()
         {
+            UserId = Convert.ToInt32(HttpContext.Session.GetInt32("userId"));
+            Username = HttpContext.Session.GetString("username");
+
             RestClient client = new("https://localhost:5001/api/");
 
-            RestRequest request = new("Games", DataFormat.Json);
+            RestRequest request = new("Games/player/" + UserId, DataFormat.Json);
 
             var response = client.Get<List<Game>>(request);
 
             Games = response.Data;
-            Username = HttpContext.Session.GetString("username");
         }
-
         public IActionResult OnPost()
         {
             HttpContext.Session.SetInt32("gameId", Game.Id);

@@ -42,6 +42,26 @@ namespace LudoV2Api.Controllers
 
             return game;
         }
+        public class Testsak
+        {
+            public Game Game { get; set; }
+            public Player Player { get; set; }
+        }
+        // GET: api/Games
+        [HttpGet("player/{id}")]
+        public async Task<ActionResult<List<Game>>> GetGamesForPlayer(int id)
+        {
+            var playerGames = await _context.GamePlayers.Where(x => x.PlayerId == id).ToListAsync();
+
+            List<Game> games = new();
+            foreach (var item in playerGames)
+            {
+                var game = await _context.Games.Where(x => x.Id == item.GameId).FirstOrDefaultAsync();
+
+                games.Add(game);
+            }
+            return games;
+        }
 
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

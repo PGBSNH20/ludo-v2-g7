@@ -14,18 +14,9 @@
 
         <form method="post">
             <input type="hidden" asp-for="@Model.Game.Id" value="@game.Id" />
-            <input type="hidden" asp-for="@Model.Game.CurrentTurn" value="@game.CurrentTurn" />
-            <input type="hidden" asp-for="@Model.Game.NumberOfPlayers" value="@game.NumberOfPlayers" />
-            <input type="hidden" asp-for="@Model.Game.FirstPlace" value="@game.FirstPlace" />
-            <input type="hidden" asp-for="@Model.Game.SecondPlace" value="@game.SecondPlace" />
-            <input type="hidden" asp-for="@Model.Game.ThirdPlace" value="@game.ThirdPlace" />
-            <input type="hidden" asp-for="@Model.Game.FourthPlace" value="@game.FourthPlace" />
             <input type="hidden" asp-for="@Model.Game.GameName" value="@game.GameName" />
             <button class="button" type="submit">Play</button>
         </form>
-        <div class="divider">
-            <h5>--------------------------------</h5>
-        </div>
-
+        <a class="button" href="/Ludo">Spactate</a>
     }
 </div>

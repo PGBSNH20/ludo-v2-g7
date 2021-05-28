@@ -21,7 +21,7 @@ namespace LudoV2Web.Pages
 
         public async Task<ActionResult> OnPost()
         {
-            if (Request.Form["login"] == 0)
+            if (Request.Form["login"].ToString() == "0")
             {
                 Player player = new() { PlayerName = Request.Form["username"] };
 
@@ -33,26 +33,30 @@ namespace LudoV2Web.Pages
                 var response = await client.PostAsync<Player>(request);
 
                 HttpContext.Session.SetString("username", response.PlayerName);
-                HttpContext.Session.SetInt32("usernameId", response.Id);
+                HttpContext.Session.SetInt32("userId", response.Id);
 
                 return RedirectToPage("index");
             }
             else
             {
-                var client = new RestClient("https://localhost:5001/api/");
+                var client = new RestClient ("https://localhost:5001/api/");
 
                 var request = new RestRequest("Players", DataFormat.Json);
 
-                var response = await client.GetAsync<List<Player>>(request);
+                try
+                {
+                    var response = await client.GetAsync<List<Player>>(request);
 
-                var user = response.Find( x => x.PlayerName == Request.Form["username"]);
+                    var user = response.Find( x => x.PlayerName == Request.Form["username"]);
+                
+
 
                 if (user != null)
                 {
                     var options = CustomCookiesOptions.CustomCookieOptions();
 
                     HttpContext.Session.SetString("username", user.PlayerName);
-                    HttpContext.Session.SetInt32("usernameId", user.Id);
+                    HttpContext.Session.SetInt32("userId", user.Id);
 
 
                     return RedirectToPage("index");
@@ -60,6 +64,12 @@ namespace LudoV2Web.Pages
                 else
                 {
                     return Page();
+                }
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
                 }
 
             }

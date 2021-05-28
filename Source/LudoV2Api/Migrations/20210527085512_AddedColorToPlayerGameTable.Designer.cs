@@ -4,14 +4,16 @@ using LudoV2Api.Models.DbModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LudoV2Api.Migrations
 {
     [DbContext(typeof(LudoContext))]
-    partial class LudoContextModelSnapshot : ModelSnapshot
+    [Migration("20210527085512_AddedColorToPlayerGameTable")]
+    partial class AddedColorToPlayerGameTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,11 +31,11 @@ namespace LudoV2Api.Migrations
                     b.Property<string>("CurrentTurn")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("FirstPlace")
+                        .HasColumnType("int");
 
-                    b.Property<string>("FourthPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("FourthPlace")
+                        .HasColumnType("int");
 
                     b.Property<string>("GameName")
                         .HasColumnType("nvarchar(max)");
@@ -44,13 +46,21 @@ namespace LudoV2Api.Migrations
                     b.Property<int>("NumberOfPlayers")
                         .HasColumnType("int");
 
-                    b.Property<string>("SecondPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PlayerGameGameId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("ThirdPlace")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PlayerGamePlayerId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SecondPlace")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ThirdPlace")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlayerGameGameId", "PlayerGamePlayerId");
 
                     b.ToTable("Games");
                 });
@@ -88,10 +98,18 @@ namespace LudoV2Api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("PlayerGameGameId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PlayerGamePlayerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PlayerName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PlayerGameGameId", "PlayerGamePlayerId");
 
                     b.ToTable("Players");
                 });
@@ -112,6 +130,13 @@ namespace LudoV2Api.Migrations
                     b.ToTable("GamePlayers");
                 });
 
+            modelBuilder.Entity("LudoV2Api.Models.Game", b =>
+                {
+                    b.HasOne("LudoV2Api.Models.PlayerGame", null)
+                        .WithMany("Game")
+                        .HasForeignKey("PlayerGameGameId", "PlayerGamePlayerId");
+                });
+
             modelBuilder.Entity("LudoV2Api.Models.Pawn", b =>
                 {
                     b.HasOne("LudoV2Api.Models.Game", "Game")
@@ -119,6 +144,20 @@ namespace LudoV2Api.Migrations
                         .HasForeignKey("GameId");
 
                     b.Navigation("Game");
+                });
+
+            modelBuilder.Entity("LudoV2Api.Models.Player", b =>
+                {
+                    b.HasOne("LudoV2Api.Models.PlayerGame", null)
+                        .WithMany("Player")
+                        .HasForeignKey("PlayerGameGameId", "PlayerGamePlayerId");
+                });
+
+            modelBuilder.Entity("LudoV2Api.Models.PlayerGame", b =>
+                {
+                    b.Navigation("Game");
+
+                    b.Navigation("Player");
                 });
 #pragma warning restore 612, 618
         }
