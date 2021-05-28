@@ -39,13 +39,17 @@ namespace LudoV2Web.Pages
             }
             else
             {
-                RestClient client = new("https://localhost:5001/api/");
+                var client = new RestClient ("https://localhost:5001/api/");
 
                 var request = new RestRequest("Players", DataFormat.Json);
 
-                var response = await client.GetAsync<List<Player>>(request);
+                try
+                {
+                    var response = await client.GetAsync<List<Player>>(request);
 
-                var user = response.Find( x => x.PlayerName == Request.Form["username"]);
+                    var user = response.Find( x => x.PlayerName == Request.Form["username"]);
+                
+
 
                 if (user != null)
                 {
@@ -60,6 +64,12 @@ namespace LudoV2Web.Pages
                 else
                 {
                     return Page();
+                }
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
                 }
 
             }
