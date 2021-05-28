@@ -1,10 +1,9 @@
-## Responsivitet med CSS
+# Responsivitet med CSS
 
 Det som redan är skapat utav ifrån Razor pages när man gör ett .net core webb applikation är redan  
 responsivt så det ända som behövdes göra var att göra spelplanen och speläserna responsiva
 
-## Media queries
-De media queries som används för att göra det responsivt är dem här under:
+## Media queries för enheter med 320px bredd till 520px bredd
 ```
 /* Small devices width  min-width 320px*/
 @media only screen and (min-width: 320px){
@@ -41,7 +40,8 @@ De media queries som används för att göra det responsivt är dem här under:
 }
 ```
 ## 1:1 aspect ratio för spel planen
-I media queryn nedanför så har vi gjort så att spelplanen är en 1:1 aspect ratio
+I media queryn nedanför så har vi gjort så att spelplanen är en 1:1 aspect ratio.  
+Den skalas med storleken på skärmen i en 1:1 aspect ratio när enhetens bredd är mindre än 600px
 ```
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -63,7 +63,7 @@ I media queryn nedanför så har vi gjort så att spelplanen är en 1:1 aspect r
     }
 }
 ```
-## Style för enheter med 600px bredd och uppåt
+## Media queries för enheter med 600px bredd och uppåt
 ```
 /* Small devices (portrait tablets and large phones, 600px and up) */
 @media only screen and (min-width: 600px) {
