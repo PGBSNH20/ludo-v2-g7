@@ -42,11 +42,31 @@ namespace LudoV2Api.Controllers
 
             return game;
         }
+        public class Testsak
+        {
+            public Game Game { get; set; }
+            public Player Player { get; set; }
+        }
+        // GET: api/Games
+        [HttpGet("player/{id}")]
+        public async Task<ActionResult<List<Game>>> GetGamesForPlayer(int id)
+        {
+            var playerGames = await _context.GamePlayers.Where(x => x.PlayerId == id).ToListAsync();
+
+            List<Game> games = new();
+            foreach (var item in playerGames)
+            {
+                var game = await _context.Games.Where(x => x.Id == item.GameId).FirstOrDefaultAsync();
+
+                games.Add(game);
+            }
+            return games;
+        }
 
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutGame(int id, Game game, int dice)
+        public async Task<IActionResult> PutGame(int id, Game game)
         {
             if (id != game.Id)
             {
@@ -79,7 +99,7 @@ namespace LudoV2Api.Controllers
         [HttpPost]
         public async Task<ActionResult<NewGameRequest>> PostGame(NewGameRequest gameRequest)
         {
-            Game game = new() { CurrentTurn = gameRequest.CurrentTurn, NumberOfPlayers = gameRequest.NumberOfPlayers };
+            Game game = new() { CurrentTurn = gameRequest.CurrentTurn, NumberOfPlayers = gameRequest.NumberOfPlayers, GameName = gameRequest.GameName };
 
             string[] colors = new[] { "Red", "Blue", "Green", "Yellow" };
 
@@ -104,22 +124,6 @@ namespace LudoV2Api.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetGame", new { id = game.Id }, game);
-        }
-
-        // DELETE: api/Games/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id)
-        {
-            var game = await _context.Games.FindAsync(id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            _context.Games.Remove(game);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
         private bool GameExists(int id)

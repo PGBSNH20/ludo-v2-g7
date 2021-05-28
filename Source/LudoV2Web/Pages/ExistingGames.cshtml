@@ -1,0 +1,20 @@
+﻿@page
+@model LudoV2Web.Pages.ExistingGamesModel
+@{
+}
+
+
+<div>
+    @foreach (var game in @Model.Games)
+    {
+        <p>@game.GameName</p>
+        <p>current turn: @game.CurrentTurn</p>
+
+        <form method="post">
+            <input type="hidden" asp-for="@Model.Game.Id" value="@game.Id" />
+            <input type="hidden" asp-for="@Model.Game.GameName" value="@game.GameName" />
+            <button type="submit">Play</button>
+        </form>
+        <a class="button" href="/Ludo">Spactate</a>
+    }
+</div>

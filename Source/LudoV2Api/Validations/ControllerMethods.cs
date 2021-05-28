@@ -14,7 +14,7 @@ namespace LudoV2Api.Validations
         {
             var currentTurn = context.Games.Where(v => v.Id == gameid).Select(x => x.CurrentTurn).FirstOrDefault();
 
-            if (currentTurn != teamColor)
+            if (currentTurn.ToLower() != teamColor.ToLower())
             {
                 return false;
             }
@@ -32,7 +32,7 @@ namespace LudoV2Api.Validations
 
         public static int PawnSafeZone(int position, string teamColor)
         {
-            if (position > 43 && teamColor == "Red")
+            if (position > 43 && teamColor.ToLower() == "red")
             {
                 var restMoves = position - 47;
 
@@ -51,7 +51,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 13 && teamColor == "Blue")
+            else if (position > 13 && teamColor.ToLower() == "blue")
             {
                 if (position < 48)
                 {
@@ -75,7 +75,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 23 && teamColor == "Green")
+            else if (position > 23 && teamColor.ToLower() == "green")
             {
                 if (position < 52)
                 {
@@ -99,7 +99,7 @@ namespace LudoV2Api.Validations
                 }
             }
 
-            else if (position > 33 && teamColor == "Yellow")
+            else if (position > 33 && teamColor.ToLower() == "yellow")
             {
                 if (position < 56)
                 {
@@ -130,30 +130,30 @@ namespace LudoV2Api.Validations
         {
             int knockedOutBasePosition = -1;
 
-            if (existsOnPosition.Color == teamColor)
+            if (existsOnPosition.Color.ToLower() == teamColor.ToLower())
             {
                 existsOnPosition.Position = -2;
                 return existsOnPosition;
             }
 
-            else if (existsOnPosition.Position == newPosition && existsOnPosition.Color != teamColor)
+            else if (existsOnPosition.Position == newPosition && existsOnPosition.Color.ToLower() != teamColor.ToLower())
             {
-                if (existsOnPosition.Color == "Red")
+                if (existsOnPosition.Color.ToLower() == "red")
                 {
                     knockedOutBasePosition = 0;
                     existsOnPosition.EligibleForWin = true;
                 }
-                else if (existsOnPosition.Color == "Blue")
+                else if (existsOnPosition.Color.ToLower() == "blue")
                 {
                     knockedOutBasePosition = 1;
                     existsOnPosition.EligibleForWin = false;
                 }
-                else if (existsOnPosition.Color == "Green")
+                else if (existsOnPosition.Color.ToLower() == "green")
                 {
                     knockedOutBasePosition = 2;
                     existsOnPosition.EligibleForWin = false;
                 }
-                else if (existsOnPosition.Color == "Yellow")
+                else if (existsOnPosition.Color.ToLower() == "yellow")
                 {
                     knockedOutBasePosition = 3;
                     existsOnPosition.EligibleForWin = false;
@@ -162,6 +162,41 @@ namespace LudoV2Api.Validations
 
             existsOnPosition.Position = knockedOutBasePosition;
             return existsOnPosition;
+        }
+
+        public static int NextTurn(int turnOrder, int numberOfPlayers)
+        {
+            if (turnOrder + 1 > numberOfPlayers - 1)
+            {
+                turnOrder = 0;
+                return turnOrder;
+            }
+            else
+            {
+                turnOrder++;
+                return turnOrder;
+            }
+        }
+
+        public static int PawnExistsOnPosition(Pawn existsOnPosition, string pawnRequestTeamColor, int pawnId, int newPosition)
+        {
+            if (existsOnPosition != null && existsOnPosition.Id != pawnId && existsOnPosition.Position != 60)
+            {
+                Pawn knockedOutPosition = ControllerMethods.KockOutPawn(pawnRequestTeamColor, existsOnPosition, newPosition);
+
+               if (knockedOutPosition.Position >= 0)
+               {
+                    return knockedOutPosition.Position;
+               }
+                else
+                {
+                    return -1;
+                }
+            }
+            else
+            {
+                return -2;
+            }
         }
     }
 

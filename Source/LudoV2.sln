@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Api", "LudoV2Api\LudoV2Api.csproj", "{E95EE8F1-E246-49FE-95B9-16BE509FFB52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoV2Test", "LudoV2Test\LudoV2Test.csproj", "{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Test", "LudoV2Test\LudoV2Test.csproj", "{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoV2Web", "LudoV2Web\LudoV2Web.csproj", "{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43FDA00F-3090-4DE2-BCA9-EBFA259B97D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{609AFF7E-E7FB-4ECD-86B5-CE6BC7FA67AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
