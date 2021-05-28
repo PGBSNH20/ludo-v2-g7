@@ -111,32 +111,14 @@
     position: absolute;
 }
 
-
-/* Extra small devices (phones, 600px and down) */
-@media only screen and (max-width: 600px) {
-    .test{
-        position: relative;
-        width: 100%;
-    }
-    .game {
-        width: auto;
-        height: auto;
-    }
-    .game::before{
-        float: left;
-        padding-top: 100%;
-        content: "";
-    }
-    .game div{
-        float:left;
-    }
+/* Small devices width  min-width 320px*/
+@media only screen and (min-width: 320px){
     .pawn {
         width: 15px;
         height: 15px;
         margin: 2px !important;
     }
 }
-
 /* Small devices width  min-width 375px*/
 @media only screen and (min-width: 375px) {
     .pawn {
@@ -160,6 +142,26 @@
         width: 25px;
         height: 25px;
         margin: 4px !important;
+    }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .gameContainer{
+        position: relative;
+        width: 100%;
+    }
+    .game {
+        width: auto;
+        height: auto;
+    }
+    .game::before{
+        float: left;
+        padding-top: 100%;
+        content: "";
+    }
+    .game div{
+        float:left;
     }
 }
 
