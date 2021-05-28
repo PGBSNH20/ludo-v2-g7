@@ -2,25 +2,36 @@
 @model LudoV2Web.Pages.NewGameModel
 @{
 }
+<link rel="stylesheet" href="~/css/styling.css" />
 
 <div>
     <h1>Create a new Ludo Game</h1>
 
     <form method="post">
-        <label for="gameName">Name the game</label>
+        <label for="gameName">Name the game:</label>
         <input asp-for="NewGame.GameName" type="text" name="gameName" placeholder="Name of the game" />
 
-        <label for="players">Number of players (between 2 and 4)</label>
-        <input value="4" type="range" name="players" min="2" max="4" />
+        @*<label for="players">Number of players (between 2 and 4)</label>*@
+        <p>Number of players: <span id="out">output</span></p>
+        <input value="4" type="range" name="players" min="2" max="4" class="slider" id="myRange"/>
 
         <label for="startColor">select starting color</label>
-        <select name="startColor">
-            <option value="Red">Red</option>
-            <option value="Blue">Blue</option>
-            <option value="Green">Green</option>
-            <option value="Yellow">Yellow</option>
+        <select style="background-color: dimgrey" name="startColor">
+            <option style="color: red" value="Red">Red</option>
+            <option style="color: blue" value="Blue">Blue</option>
+            <option style="color: green" value="Green">Green</option>
+            <option style="color: yellow" value="Yellow">Yellow</option>
         </select>
 
-        <button type="submit">Start Game</button>
+        <button class="submit-button" type="submit">Start Game</button>
     </form>
 </div>
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("out");
+
+    output.innerHTML = slider.value;
+    slider.oninput = function () {
+        output.innerHTML = this.value;
+    }
+</script>

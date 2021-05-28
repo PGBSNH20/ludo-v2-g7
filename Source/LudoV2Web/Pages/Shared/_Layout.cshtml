@@ -1,17 +1,25 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html style="background-color: #333" lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LudoV2Web</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/styling.css" />
 </head>
-<body>
+<body style="background-color: dimgray">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 header-background">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">LudoV2Web</a>
+                <a class="navbar-brand ludo-title" asp-area="" asp-page="/Index">
+                    <p>
+                        <span style='color: red'>L</span>
+                        <span style='color: green'>U</span>
+                        <span style='color: yellow'>D</span>
+                        <span style='color: #337dff'>O</span>
+                    </p>
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -19,22 +27,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            <a asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/NewGame">New Game</a>
+                            <a class="nav-item" asp-area="" asp-page="/NewGame">New Game</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/UserGames">Your Games</a>
+                            <a class="nav-item" asp-area="" asp-page="/UserGames">Your Games</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Account">Account</a>
+                            <a asp-area="" asp-page="/Account">Account</a>
                         </li>
                         <li class="nav-item">
-                            <p id="userName" class="nav-link text-dark">@ViewData["Username"]</p>
+                            <p id="userName" class="nav-item">@ViewData["Username"]</p>
                         </li>
                     </ul>
                 </div>
