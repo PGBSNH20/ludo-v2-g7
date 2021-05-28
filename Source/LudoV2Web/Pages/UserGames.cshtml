@@ -2,6 +2,7 @@
 @model LudoV2Web.Pages.UserGamesModel
 @{
 }
+<link rel="stylesheet" href="~/css/styling.css" />
 
 @if (Model.UserId == 0)
 {
@@ -21,7 +22,7 @@ else
         <form method="post">
             <input type="hidden" asp-for="@Model.Game.Id" value="@game.Id" />
             <input type="hidden" asp-for="@Model.Game.GameName" value="@game.GameName" />
-            <button type="submit">Play</button>
+            <button class="submit-button" type="submit">Play</button>
         </form>
     }
 }

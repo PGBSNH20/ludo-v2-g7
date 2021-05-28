@@ -44,7 +44,8 @@ namespace LudoV2Web.Pages
 
             var gameDeserialized = JsonConvert.DeserializeObject<Game>(response.Content);
 
-            return RedirectToPage("/Ludo", new { title = gameDeserialized.GameName, gameId = gameDeserialized.Id});
+            HttpContext.Session.SetInt32("gameId", gameDeserialized.Id);
+            return RedirectToPage("/Ludo", new { title = gameDeserialized.GameName});
         }
     }
 }

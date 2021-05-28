@@ -1,6 +1,8 @@
 ﻿@page "{title?}"
 @model LudoV2Web.Pages.LudoModel
 @{
+    <link rel="stylesheet" href="~/css/styling.css" />
+
     var playerIsInTheGame = Model.Players.Find(x => x.PlayerId == Model.UserId);
     var disable = "";
     var dNone = "";
@@ -41,10 +43,10 @@ else
             <input id="isBase" type="hidden" value="0" />
             <input id="pawnBasePosition" type="hidden" value="0" />
 
-            <button id="movePawnButton" type="button" disabled onclick="PostLudoData()">Move Pawn</button>
+            <button class="submit-button" id="movePawnButton" type="button" disabled onclick="PostLudoData()">Move Pawn</button>
         </form>
 
-        <button id="diceButton" @disable onclick="DiceRoll()">Roll Dice</button>
+        <button class="submit-button" id="diceButton" @disable onclick="DiceRoll()">Roll Dice</button>
         <p id="diceRoll">Dice roll: </p>
     </div>
 }
@@ -68,7 +70,7 @@ else
                 }
             }
         </select>
-        <input id="submitColor" type="submit" name="name" value="Select Color" />
+        <input class="submit-button" id="submitColor" type="submit" name="name" value="Select Color" />
     </form>
 </div>
 
