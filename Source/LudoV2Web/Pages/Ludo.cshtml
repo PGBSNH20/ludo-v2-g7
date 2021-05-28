@@ -7,7 +7,7 @@
     var disable = "";
     var dNone = "";
 
-    if (playerIsInTheGame == null || playerIsInTheGame.Color != Model.Game.CurrentTurn)
+    if (playerIsInTheGame == null || playerIsInTheGame.Color.ToLower() != Model.Game.CurrentTurn.ToLower())
     {
         disable = "disabled";
     }
@@ -74,7 +74,7 @@ else
     </form>
 </div>
 
-<div class="test">
+<div class="gameContainer">
 
     <div class="game">
 
@@ -260,12 +260,9 @@ else
 
 </div>
 
-
-
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/LudoGame.js"></script>
-
 
 @{
     i = 1;
@@ -293,4 +290,3 @@ else
         i = 1;
     }
 }
-

@@ -1,8 +1,9 @@
 # Documentation
 
 
+## Api
 
-## User Endpoints
+### User Endpoints
 
 
 ```
@@ -86,7 +87,10 @@ Vi använder RazorPages, HTML, JavaScript, css, JQuery och SignalR.
 
 Läs mer om frontend dokumentationen [här](Frontend.md)
     
+### Responsivitet
+Vi använder media queries för att göra websidan responsiv. 
 
+Läs mer om det [här](VG_Responsive.md)
 
 
 
